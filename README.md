@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+# Chat Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### An application that allows users to send **Text** messages, **Image** messages, **Audio** files, **Video** files.
 
-## Available Scripts
+## Special Features
 
-In the project directory, you can run:
+1. User can **Register**.
+2. User can **Login**.
+3. User can **Record Audio** and send to **reciepent**.
+4. User can **Record Video** and send to **reciepent**.
+5. User can **Capture Image** and send to **reciepent**.
+6. User can see **MessageDeliveryStatus** wether a message is **PENDING**, **SENT**, **SEEN** in **real time**.
+7. User can see **UserStatus** wether a user is **Active** or **Offline**.
+8. User can see **UserActivity** wether a user is **Typing**, **RecordingAudio**, **RecordingVideo**, **CapturingImage** in **real time**.
+9. User can **Search** a particular user in users list.
+10. User can **SearchInChat** and **Navigate** to each message containing search term.
+11. User can **customize** each **ChatContainer** according to him. like **Apply photo in background** from **customizationSidebar**,
+12. User can **see** all **images**, **videos** and **audio files** sent by **selectedChat** in **separate tabs** in **customizationSidebar**,
+13. User can **Delete** message from chat, with two options **DeleteForMe** and **DeleteForEveryone**.
 
-### `npm start`
+# Development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend
 
-### `npm test`
+ReactJS (React/Context)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend
 
-### `npm run build`
+NodeJS, ExpressJS, Socket.IO for real-time communication between clients.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Functionality
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Components                      | Page Details                                                                                                                                                                                                                                                                                                                                                                                                                                          | Navigation | API                                         | SocketEvent |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------- | ----------- |
+| **Register**                    | Registeration Form containing Fields: **UserProfilePicture**, **Name**, **EmailId** , **Password**, **Confirm Password**, **Register Button** to register.                                                                                                                                                                                                                                                                                            | ---        | https://localhost:5000/register-new-user    | ---         |
+| **Login**                       | Login Form containing Fields: **RegisteredEmail**, **Password** and **Login** button to login.                                                                                                                                                                                                                                                                                                                                                        | ---        | https://localhost:5000/login                | ---         |
+| **Header**                      | It will contain logged-in user details and render a small photo of logged-in user in header                                                                                                                                                                                                                                                                                                                                                           | ---        | https://localhost:5000/profile-details      | ---         |
+| **AllChats**                    | To Get the list of all **Registered** users. **SearchParticular User** , **Filter** by **Active** or **Offline**. if filter applied then **search functionality** will be applied to filtered users.                                                                                                                                                                                                                                                  | ---        | https://localhost:5000/all-registered-users | ---         |
+| **SearchInChat**                | It will contain an **input tag** and three button **upArrow**, **downArrow** and **CloseButton**.                                                                                                                                                                                                                                                                                                                                                     | ---        | ---                                         | ---         |
+| **Images**                      | All Images wether sentby or recievedby selectedChat user.                                                                                                                                                                                                                                                                                                                                                                                             | ---        | https://localhost:5000/all-image-messages   | ---         |
+| **Videos**                      | All Videos wether sentby or receivedby selectedChat user.                                                                                                                                                                                                                                                                                                                                                                                             | ---        | https://localhost:5000/all-video-messages   | ---         |
+| **CustomizationSidebar**        | It contains selectedchat user's **dp** and **Two Buttons** 1. Media 2. Options. by default media will be selected. if we click on **Media** then a container gets mounted in bottom with **different tabs** 1. images 2. videos. by default images will be selected and in this tab we can see all image wether those are sentby or receiveby selectedUser. and it wiill be same for other tabs like for video tab so all videos will be shown there. | ---        | ---                                         | ---         |
+| **ChatHeaderContainer**         | **SearchInChat** component. ChatHeaderComponent contain selected user's **profileImage** and **UserStatus** wether selected user is **Active** or **Inactive** . A button to toggle **CustomizationSidebar** at the right side of the selectedChatContainer in min 1200px wide screen. if width is <1200px then the same button will only open the **customizationSidebar** in a model and **close** by clicking anywhere in modal.                   | ---        | ---                                         | ---         |
+| **BuildTextMessageUi**          | **Builds UI** of Text Message                                                                                                                                                                                                                                                                                                                                                                                                                         | ---        | ---                                         | ---         |
+| **BuildImageMessageUi**         | **Builds UI** of Image Message                                                                                                                                                                                                                                                                                                                                                                                                                        | ---        | ---                                         | ---         |
+| **BuildAudioMessageUi**         | **Builds UI** of Audio Message                                                                                                                                                                                                                                                                                                                                                                                                                        | ---        | ---                                         | ---         |
+| **BuildVideoMessageUi**         | **Builds UI** of Video Message                                                                                                                                                                                                                                                                                                                                                                                                                        | ---        | ---                                         | ---         |
+| **BuildCapturedAudioMessageUi** | **Builds UI** of CapturedAudio Message                                                                                                                                                                                                                                                                                                                                                                                                                | ---        | ---                                         | ---         |
+| **BuildCapturedVideoMessageUi** | **Builds UI** of CapturedVideo Message                                                                                                                                                                                                                                                                                                                                                                                                                | ---        | ---                                         | ---         |
+| **BuildCapturedImageMessageUi** | **Builds UI** of CapturedImage Message                                                                                                                                                                                                                                                                                                                                                                                                                | ---        | ---                                         | ---         |
+| **SendTextMessage**             | This **component** will used to send **text messages**.                                                                                                                                                                                                                                                                                                                                                                                               |
+| **SendAudioMessage**            | This **component** will used to send **audio messages**.                                                                                                                                                                                                                                                                                                                                                                                              |
+| **SendImageMessage**            | This **component** will used to send **Image messages**.                                                                                                                                                                                                                                                                                                                                                                                              |
+| **SendVideoMessage**            | This **component** will used to send **Audio messages**.                                                                                                                                                                                                                                                                                                                                                                                              |
+| **CaptureAndSendAudioMessage**  | This **component** will used to **capture audio** and **send to the user**.                                                                                                                                                                                                                                                                                                                                                                           |
+| **CaptureAndSendVideoMessage**  | This **component** will used to **capture video** and **send to the user**.                                                                                                                                                                                                                                                                                                                                                                           |
+| **CaptureAndSendImageMessage**  | This **component** will used to **capture image** and **send to the user**.                                                                                                                                                                                                                                                                                                                                                                           |
+| **ChatMiddleContainer**         | Here we will render all the chat messages of all type wether it is **image**, **text**, **video**, **audio**, **captured_audio**, **captured_video** and **capturedImage**                                                                                                                                                                                                                                                                            | ---        | ---                                         | ---         |
+| **ShareMedia**                  | it will contain all components related to sharing media like audio, video, image, captured_audio, captured_video, captured_image.                                                                                                                                                                                                                                                                                                                     |
+| **ChatFooterContainer**         | **ShareMedia** component. and **SendTextMessage** component.                                                                                                                                                                                                                                                                                                                                                                                          | ---        | ---                                         | ---         |
+| **SelectedChatContainer**       | **ChatHeaderContainer**, **ChatMiddleContainer**, **ChatFooterContainer**                                                                                                                                                                                                                                                                                                                                                                             | ---        | ---                                         | ---         |
+| **ChatContext**                 | it will contain a **list of active users**, **socket**, **selectedChat**, **loggedInUserProfile**                                                                                                                                                                                                                                                                                                                                                     |
+| **Modal**                       | It will used to **display** a particular **component** means it will **overlay the screen** and show that component **first**.                                                                                                                                                                                                                                                                                                                        |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Design Files
 
-### `npm run eject`
+[Crazy](https://connectme-html.themeyn.com/index.html#)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
