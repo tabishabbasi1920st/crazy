@@ -44,7 +44,6 @@ export default function Profile() {
             password: profile.password,
             imageUrl: `http://localhost:${process.env.REACT_APP_PORT}/${profile.imageUrl}`,
           };
-          console.log(updatedProfile);
 
           setProfile(updatedProfile);
           setApiStatus(apiConstants.success);

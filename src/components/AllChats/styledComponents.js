@@ -7,7 +7,6 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 2px solid blue;
   @media screen and (min-width: 768px) {
     border-right: 1px solid #334155;
   }
@@ -78,7 +77,6 @@ export const DescriptionContainer = styled.div`
   flex-direction: column;
   justify-content: center;
 `;
-
 
 export const TopContainer = styled.div`
   height: 115px;
