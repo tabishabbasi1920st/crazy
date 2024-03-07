@@ -7,7 +7,7 @@ export const MainContainer = styled.div`
 `;
 
 export const Header = styled.div`
-  height: 95px;
+  height: 70px;
   border: 2px solid red;
 `;
 export const Main = styled.div`
@@ -16,6 +16,6 @@ export const Main = styled.div`
   border: 2px solid black;
 `;
 export const Footer = styled.div`
-  height: 88px;
-  border: 2px solid green;
+  height: 85px;
+  border: 2px solid red;
 `;

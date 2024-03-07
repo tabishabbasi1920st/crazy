@@ -3,7 +3,7 @@ import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import Header from "../Header";
 import AllChat from "../AllChats";
-import SelectedChatContainer from "../SelectedChatConatainer";
+import SelectedChatContainer from "../SelectedChatContainer";
 
 export default function Home() {
   const { selectedChat } = useContext(ChatContext);
