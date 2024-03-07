@@ -82,3 +82,8 @@ NodeJS, ExpressJS, Socket.IO for real-time communication between clients.
 2. dotenv
 3. express
 4. nodemon
+5. socket.io
+6. bcrypt
+7. jsonwebtoken
+8. mongoose
+9. body-parser
