@@ -1,5 +1,10 @@
 import { MainContainer } from "./styledComponents";
+import LoggedInUserProfile from "../LoggedInUserProfile";
 
 export default function Header() {
-  return <MainContainer>Header</MainContainer>;
+  return (
+    <MainContainer>
+      <LoggedInUserProfile />
+    </MainContainer>
+  );
 }
