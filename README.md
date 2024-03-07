@@ -68,4 +68,17 @@ NodeJS, ExpressJS, Socket.IO for real-time communication between clients.
 
 [Crazy](https://connectme-html.themeyn.com/index.html#)
 
+# Third party packages for Frontend
 
+1. react-loader-spinner
+2. react-router-dom
+3. react-toastify
+4. styled-components
+5. js-cookie
+
+# Third party packages for Backend
+
+1. cors
+2. dotenv
+3. express
+4. nodemon
