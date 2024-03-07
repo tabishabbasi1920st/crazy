@@ -1,9 +1,16 @@
-import { MainContainer, BodyContainer } from "./styledComponents";
+import {
+  MainContainer,
+  BodyContainerSm,
+  BodyContainerLg,
+  FirstContainer,
+  SecondContainer,
+} from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import Header from "../Header";
 import AllChat from "../AllChats";
 import SelectedChatContainer from "../SelectedChatContainer";
+import ChatNotSelected from "../ChatNotSelected";
 
 export default function Home() {
   const { selectedChat } = useContext(ChatContext);
@@ -11,9 +18,23 @@ export default function Home() {
   return (
     <MainContainer>
       <Header />
-      <BodyContainer>
+      {/* This body container will show only in small devices */}
+      <BodyContainerSm>
         {selectedChat === null ? <AllChat /> : <SelectedChatContainer />}
-      </BodyContainer>
+      </BodyContainerSm>
+      {/* This body container will show only in large devices */}
+      <BodyContainerLg>
+        <FirstContainer>
+          <AllChat />
+        </FirstContainer>
+        <SecondContainer>
+          {selectedChat === null ? (
+            <ChatNotSelected />
+          ) : (
+            <SelectedChatContainer />
+          )}
+        </SecondContainer>
+      </BodyContainerLg>
     </MainContainer>
   );
 }

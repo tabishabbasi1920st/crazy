@@ -8,14 +8,14 @@ export const MainContainer = styled.div`
 
 export const Header = styled.div`
   height: 70px;
-  border: 2px solid red;
+  flex-shrink: 0;
 `;
 export const Main = styled.div`
   display: flex;
   flex-grow: 1;
-  border: 2px solid black;
+  overflow: scroll;
 `;
 export const Footer = styled.div`
-  height: 85px;
-  border: 2px solid red;
+  height: 70px;
+  flex-shrink: 0;
 `;
