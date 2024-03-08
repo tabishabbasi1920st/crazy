@@ -17,7 +17,8 @@ import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 
 export default function SelectedChatHeader() {
-  const { selectedChat, setSelectedChat } = useContext(ChatContext);
+  const { selectedChat, setSelectedChat, setSearchInChat } =
+    useContext(ChatContext);
 
   const { imageUrl, name } = selectedChat;
   const formattedImageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${imageUrl}`;
@@ -39,7 +40,7 @@ export default function SelectedChatHeader() {
         </InfoContainer>
       </UserInfoContainer>
       <OptionsContainer>
-        <SearchChatBtn>
+        <SearchChatBtn onClick={() => setSearchInChat(true)}>
           <FaSearch />
         </SearchChatBtn>
         <WindowButton>
