@@ -13,6 +13,12 @@ import SelectedChatContainer from "../SelectedChatContainer";
 import ChatNotSelected from "../ChatNotSelected";
 import io from "socket.io-client";
 
+const msgDelieveryStatusConstants = {
+  pending: "PENDING",
+  sent: "SENT",
+  seen: "SEEN",
+};
+
 export default function Home() {
   const { selectedChat, setSocket, profile, chatList, setChatList } =
     useContext(ChatContext);
@@ -30,6 +36,23 @@ export default function Home() {
 
     socket.on("TextMessage", (message) => {
       setChatList((prevList) => [...prevList, message]);
+      // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
+      socket.emit("NewMsgReaded", {
+        id: message.id,
+        sentBy: profile.email,
+        sentTo: message.sentBy,
+      });
+    });
+
+    socket.on("NewMsgReaded", (msg) => {
+      const { msgId } = msg;
+      setChatList((prevList) =>
+        prevList.map((msg) =>
+          msg.id === msgId
+            ? { ...msg, delieveryStatus: msgDelieveryStatusConstants.seen }
+            : msg
+        )
+      );
     });
 
     return () => {

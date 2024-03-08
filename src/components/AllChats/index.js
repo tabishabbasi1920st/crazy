@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../Context/ChatContext";
 import { FaSearch } from "react-icons/fa";
 import Loader from "../Loader";
+import Failure from "../Failure";
 
 import {
   SearchContainer,
@@ -104,10 +105,6 @@ export default function AllChat() {
     );
   };
 
-  const renderFailureView = () => {
-    return <div>Failure view</div>;
-  };
-
   const renderAppropriateView = () => {
     switch (apiStatus) {
       case apiConstants.success:
@@ -115,7 +112,7 @@ export default function AllChat() {
       case apiConstants.inProgress:
         return <Loader />;
       default:
-        return renderFailureView();
+        return <Failure />;
     }
   };
 
