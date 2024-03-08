@@ -20,7 +20,7 @@ const msgDelieveryStatusConstants = {
 };
 
 export default function Home() {
-  const { selectedChat, setSocket, profile, chatList, setChatList } =
+  const { selectedChat, setSocket, profile, setChatList } =
     useContext(ChatContext);
 
   useEffect(() => {
@@ -37,11 +37,15 @@ export default function Home() {
     socket.on("TextMessage", (message) => {
       setChatList((prevList) => [...prevList, message]);
       // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
-      socket.emit("NewMsgReaded", {
-        id: message.id,
-        sentBy: profile.email,
-        sentTo: message.sentBy,
-      });
+
+      if (selectedChat !== null) {
+        console.log("emittingback", selectedChat);
+        socket.emit("NewMsgReaded", {
+          id: message.id,
+          sentBy: profile.email,
+          sentTo: message.sentBy,
+        });
+      }
     });
 
     socket.on("NewMsgReaded", (msg) => {
@@ -58,7 +62,7 @@ export default function Home() {
     return () => {
       socket.disconnect();
     };
-  }, [profile]);
+  }, [profile, selectedChat]);
 
   return (
     <MainContainer>

@@ -9,7 +9,7 @@ const apiStatusConstants = {
   failure: "FAILURE",
 };
 
-export default function SelectedChatHeader() {
+export default function SelectedChatMain() {
   const { chatList, profile, selectedChat, setChatList } =
     useContext(ChatContext);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
@@ -45,11 +45,7 @@ export default function SelectedChatHeader() {
     if (profile !== null && selectedChat !== null) {
       gettingChats();
     }
-
-    return () => {};
   }, []);
-
-
 
   return (
     <>

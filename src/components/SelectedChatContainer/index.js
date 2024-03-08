@@ -4,7 +4,7 @@ import SelectedChatMain from "../SelectedChatMain";
 import SelectedChatFooter from "../SelectedChatFooter";
 import SearchInChat from "../SearchInChat";
 import { ChatContext } from "../Context/ChatContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export default function SelectedChatContainer() {
   const { searchInChat } = useContext(ChatContext);
