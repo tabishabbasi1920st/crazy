@@ -49,10 +49,14 @@ export default function Home() {
 
     // listening about new text messages.
     socket.on("TextMessage", (message) => {
-      setChatList((prevList) => [...prevList, message]);
+      if (selectedChat.email === message.sentBy) {
+        setChatList((prevList) => [...prevList, message]);
+        console.log("message received", message);
+      }
+
       // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
 
-      if (selectedChat !== null) {
+      if (selectedChat !== null && selectedChat.email === message.sentBy) {
         console.log("emittingback", selectedChat);
         socket.emit("NewMsgReaded", {
           id: message.id,
@@ -105,11 +109,14 @@ export default function Home() {
     }
 
     // listening event wether sender is typing or not.
-    socket.on("typing", (isTyping) => {
-      setSenderActivity((prevState) => ({
-        ...prevState,
-        typing: isTyping,
-      }));
+    socket.on("typing", (msg) => {
+      const { isTyping, sentBy, sentTo } = msg;
+      if (selectedChat.email === sentBy) {
+        setSenderActivity((prevState) => ({
+          ...prevState,
+          typing: isTyping,
+        }));
+      }
     });
 
     return () => {

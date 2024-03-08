@@ -83,6 +83,7 @@ export default function SendTextMessages() {
 
     // Update the chatData with the sent text message.
     setChatList((prevList) => [...prevList, newTextMessage]);
+    console.log("message sent successfully");
   };
 
   return (

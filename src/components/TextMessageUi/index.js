@@ -14,8 +14,6 @@ export default function TextMessageUi({ eachTextMessage }) {
   const { id, type, content, sentBy, sentTo, delieveryStatus, timestamp } =
     eachTextMessage;
 
-  console.log(delieveryStatus);
-
   const dt = new Date(timestamp);
   const hour = dt.getHours();
   const formattedHours = hour % 12 || 12; // convert to 12-hour format.

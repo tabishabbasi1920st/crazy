@@ -33,7 +33,6 @@ export default function SelectedChatMain() {
         const response = await fetch(apiUrl, options);
         if (response.ok) {
           const chatData = await response.json();
-          console.log("main>>>>>>>", chatData);
           setChatList(chatData);
           setApiStatus(apiStatusConstants.success);
         } else {
