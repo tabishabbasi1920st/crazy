@@ -1,6 +1,7 @@
-import { ChatContext } from "../Context/ChatContext";
 import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { ChatContext } from "../Context/ChatContext";
+import TextMessageUi from "../TextMessageUi";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -48,13 +49,16 @@ export default function SelectedChatMain() {
   }, [selectedChat]);
 
   return (
-    <>
+    <div
+      style={{
+        width: "100%;",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {chatList.map((eachMsg) => (
-        <>
-          <p>{eachMsg.content}:</p>
-          <p>{eachMsg.delieveryStatus}</p>
-        </>
+        <TextMessageUi eachTextMessage={eachMsg} />
       ))}
-    </>
+    </div>
   );
 }

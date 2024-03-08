@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.div`
-  height: 90px;
+  height: 50px;
   width: 100%;
   background-color: #132036;
   display: flex;
@@ -22,6 +22,7 @@ export const MainContainer = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    cursor: pointer;
   }
 
   input {

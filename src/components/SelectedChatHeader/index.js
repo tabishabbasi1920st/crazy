@@ -17,8 +17,13 @@ import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 
 export default function SelectedChatHeader() {
-  const { selectedChat, setSelectedChat, setSearchInChat } =
-    useContext(ChatContext);
+  const {
+    selectedChat,
+    setSelectedChat,
+    setSearchInChat,
+    onlineUsersList,
+    senderActivity,
+  } = useContext(ChatContext);
 
   const { imageUrl, name } = selectedChat;
   const formattedImageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${imageUrl}`;
@@ -26,6 +31,8 @@ export default function SelectedChatHeader() {
   const handleExitButtonClick = () => {
     setSelectedChat(null);
   };
+
+  const isActive = onlineUsersList.includes(selectedChat.email);
 
   return (
     <MainContainer>
@@ -36,7 +43,10 @@ export default function SelectedChatHeader() {
         <Dp backgroundimage={formattedImageUrl}></Dp>
         <InfoContainer>
           <p className="name">{name}</p>
-          <p className="active-status">Active</p>
+          <p className="active-status">{isActive ? "Online" : "Offline"}</p>
+          <p className="active-status">
+            {senderActivity.typing ? "Typing...." : ""}
+          </p>
         </InfoContainer>
       </UserInfoContainer>
       <OptionsContainer>

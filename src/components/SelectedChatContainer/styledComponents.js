@@ -11,8 +11,6 @@ export const Header = styled.div`
   flex-shrink: 0;
 `;
 export const Main = styled.div`
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
   overflow: auto;
   padding: 0px 10px 0px 10px;

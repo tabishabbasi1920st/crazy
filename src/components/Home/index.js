@@ -20,18 +20,31 @@ const msgDelieveryStatusConstants = {
 };
 
 export default function Home() {
-  const { selectedChat, setSocket, profile, setChatList, setChatData } =
-    useContext(ChatContext);
+  const {
+    selectedChat,
+    setSocket,
+    profile,
+    setChatList,
+    setChatData,
+    senderActivity,
+    setSenderActivity,
+    onlineUsersList,
+    setOnlineUsersList,
+  } = useContext(ChatContext);
 
   useEffect(() => {
     const socket = io("http://localhost:5000");
     setSocket(socket);
 
+    socket.on("connection", (msg) => {
+      console.log(msg);
+    });
+
     // if the user is logged in then add it to the server in active users list.
     profile !== null && socket.emit("AddUser", profile.email);
 
-    socket.on("connection", (msg) => {
-      console.log(msg);
+    socket.on("connectedUsers", (onlineUsersList) => {
+      setOnlineUsersList(onlineUsersList);
     });
 
     // listening about new text messages.
@@ -90,6 +103,14 @@ export default function Home() {
         to: selectedChat.email,
       });
     }
+
+    // listening event wether sender is typing or not.
+    socket.on("typing", (isTyping) => {
+      setSenderActivity((prevState) => ({
+        ...prevState,
+        typing: isTyping,
+      }));
+    });
 
     return () => {
       socket.disconnect();

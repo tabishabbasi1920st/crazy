@@ -30,6 +30,24 @@ export default function SendTextMessages() {
     setMsgInput(e.target.value);
   };
 
+  const handleTypingSocketEvent = (e) => {
+    // Emit a "typing" event to the server
+    socket.emit("typing", {
+      sentBy: profile.email,
+      sentTo: selectedChat.email,
+      isTyping: true,
+    });
+
+    // Set a timeout to stop typing after a certain period (e.g., 2 seconds)
+    setTimeout(() => {
+      socket.emit("typing", {
+        sentBy: profile.email,
+        sentTo: selectedChat.email,
+        isTyping: false,
+      });
+    }, 2000);
+  };
+
   const handleMessageSend = () => {
     setMsgInput("");
 
@@ -69,7 +87,14 @@ export default function SendTextMessages() {
 
   return (
     <MainContainer>
-      <input type="text" value={msgInput} onChange={handleMsgInputChange} />
+      <input
+        type="text"
+        value={msgInput}
+        onChange={(e) => {
+          handleMsgInputChange(e);
+          handleTypingSocketEvent(e);
+        }}
+      />
       <button disabled={msgInput === ""} onClick={handleMessageSend}>
         <IoSend />
       </button>
