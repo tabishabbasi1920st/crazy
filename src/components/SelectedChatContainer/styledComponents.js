@@ -12,8 +12,19 @@ export const Header = styled.div`
 `;
 export const Main = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  overflow: scroll;
+  overflow: auto;
+  padding: 0px 10px 0px 10px;
+  background-color: #0f172a;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #070b15;
+  }
 `;
 export const Footer = styled.div`
   height: 70px;

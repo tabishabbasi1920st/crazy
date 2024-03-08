@@ -50,7 +50,7 @@ export const MainContainer = styled.div`
 `;
 
 export const BackgroundImageContainer = styled.div`
-  height: 55px;
+  height: 50px;
   width: 55px;
   background-size: cover;
   background-position: center;
