@@ -33,11 +33,23 @@ export const MainContainer = styled.div`
   }
 
   li {
+    position: relative;
+    left: 0px;
     padding: 10px 10px;
     width: 100%;
     display: flex;
     align-items: center;
     cursor: pointer;
+    animation: leftToInitial 0.5s ease-in-out;
+
+    @keyframes leftToInitial {
+      0% {
+        left: -770px;
+      }
+      100% {
+        left: 0px;
+      }
+    }
   }
 
   li:hover {

@@ -4,6 +4,7 @@ export const MainContainer = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  background-color: #132036;
 `;
 
 export const Header = styled.div`

@@ -33,5 +33,8 @@ export const MainContainer = styled.div`
     &:disabled {
       color: #4e5d73;
     }
+    @media screen and (min-width: 768px) {
+      display: none;
+    }
   }
 `;

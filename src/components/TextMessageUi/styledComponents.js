@@ -6,7 +6,46 @@ export const MainContainer = styled.div`
   border-radius: 10px;
   margin: 10px 0px 10px 0px;
   display: flex;
-  /* border: 2px solid red; */
+  position: relative;
+
+  right: ${(props) => {
+    const { profile, sentBy } = props;
+    const { email } = profile;
+    return sentBy === email ? "0%" : "";
+  }};
+
+  left: ${(props) => {
+    const { profile, sentBy } = props;
+    const { email } = profile;
+    return sentBy === email ? "" : "0%";
+  }};
+
+  @keyframes rightToInitial {
+    0% {
+      right: -80%;
+    }
+    100% {
+      right: 0px;
+    }
+  }
+
+  @keyframes leftToInitial {
+    0% {
+      left: -80%;
+    }
+    100% {
+      left: 0px;
+    }
+  }
+
+  animation: ${(props) => {
+    const { profile, sentBy } = props;
+    const { email } = profile;
+    return sentBy === email
+      ? "rightToInitial 0.2s ease-in-out"
+      : "leftToInitial 0.2s ease-in-out";
+  }};
+
   /* Aligning sent messages at right side of the chat container */
   margin-left: ${(props) => {
     const { profile, sentBy } = props;
@@ -27,7 +66,6 @@ export const MainContainer = styled.div`
   }};
 
   .msg-container {
-    /* border: 2px solid green; */
     padding: ${(props) => {
       const { profile, sentBy } = props;
       const { email } = profile;

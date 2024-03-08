@@ -90,6 +90,11 @@ export default function SendTextMessages() {
       <input
         type="text"
         value={msgInput}
+        onKeyDown={(e) => {
+          if ((msgInput !== "") & (e.key === "Enter")) {
+            handleMessageSend();
+          }
+        }}
         onChange={(e) => {
           handleMsgInputChange(e);
           handleTypingSocketEvent(e);

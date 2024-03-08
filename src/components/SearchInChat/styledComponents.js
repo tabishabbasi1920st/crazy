@@ -9,6 +9,21 @@ export const MainContainer = styled.div`
   gap: 10px;
   height: 51px;
   flex-shrink: 0;
+  position: relative;
+  bottom: 0px;
+  animation: topToInitial 0.2s ease-in-out;
+
+  @keyframes topToInitial {
+    0% {
+      bottom: 200px;
+    }
+    50% {
+      bottom: -20px;
+    }
+    100% {
+      bottom: 0px;
+    }
+  }
 
   button {
     height: 100%;

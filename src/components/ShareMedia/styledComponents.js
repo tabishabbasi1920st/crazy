@@ -27,10 +27,11 @@ export const DropUpContainer = styled.ul`
   background-color: #132036;
   border-radius: 5px;
   border: 1px solid #333a4a;
-  bottom: 75px;
   width: 200px;
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
   flex-direction: column;
+  bottom: 75px;
+  overflow: hidden;
 
   li {
     padding: 10px 10px 10px 10px;
@@ -40,7 +41,23 @@ export const DropUpContainer = styled.ul`
     align-items: center;
     gap: 10px;
     transition: all 0.15s ease-in-out;
+    position: relative;
+    right: 0px;
     cursor: pointer;
+    animation: rightToInitial 0.5s ease-in-out;
+
+    @keyframes rightToInitial {
+      0% {
+        right: -100%;
+      }
+      50% {
+        right: 15px;
+      }
+      100% {
+        right: 0px;
+      }
+    }
+
     &:hover {
       background-color: #0f172a;
       padding: 10px 5px 10px 5px;
