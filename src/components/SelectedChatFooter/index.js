@@ -1,5 +1,10 @@
 import { MainContainer } from "./styledComponents";
+import SendTextMessages from "../SendTextMessages";
 
 export default function SelectedChatFooter() {
-  return <MainContainer>selected chat header</MainContainer>;
+  return (
+    <MainContainer>
+      <SendTextMessages />
+    </MainContainer>
+  );
 }
