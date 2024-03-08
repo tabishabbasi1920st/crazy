@@ -20,7 +20,7 @@ const msgDelieveryStatusConstants = {
 };
 
 export default function Home() {
-  const { selectedChat, setSocket, profile, setChatList } =
+  const { selectedChat, setSocket, profile, setChatList, setChatData } =
     useContext(ChatContext);
 
   useEffect(() => {
@@ -34,6 +34,7 @@ export default function Home() {
       console.log(msg);
     });
 
+    // listening about new text messages.
     socket.on("TextMessage", (message) => {
       setChatList((prevList) => [...prevList, message]);
       // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
@@ -48,6 +49,7 @@ export default function Home() {
       }
     });
 
+    // getting message delivery status like seen by this event.
     socket.on("NewMsgReaded", (msg) => {
       const { msgId } = msg;
       setChatList((prevList) =>
@@ -58,6 +60,36 @@ export default function Home() {
         )
       );
     });
+
+    // if receiver seen all message so he will triggered this event to tell to sender that i have seen all my messages you can update in your ui in real time.
+    socket.on("iHaveSeenAllMessages", (updatedMessages) => {
+      setChatList((prevList) =>
+        prevList.map((existingMsg) => {
+          const matchingUpdatedMessage = updatedMessages.find(
+            (updatedMsg) => updatedMsg.id === existingMsg.id
+          );
+
+          if (matchingUpdatedMessage) {
+            // Return the updated message with the new delieveryStatus
+            return {
+              ...existingMsg,
+              delieveryStatus: msgDelieveryStatusConstants.seen,
+            };
+          }
+
+          // Return the existing message if no update is found
+          return existingMsg;
+        })
+      );
+    });
+
+    // it is basically saying that i have seen all message so update those messages status as "SEEN", which are pending and not seen by me.
+    if (profile !== null && selectedChat !== null) {
+      socket.emit("updateMyMessageStatus", {
+        me: profile.email,
+        to: selectedChat.email,
+      });
+    }
 
     return () => {
       socket.disconnect();

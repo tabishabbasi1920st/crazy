@@ -45,7 +45,7 @@ export default function SelectedChatMain() {
     if (profile !== null && selectedChat !== null) {
       gettingChats();
     }
-  }, []);
+  }, [selectedChat]);
 
   return (
     <>
