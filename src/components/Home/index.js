@@ -6,14 +6,28 @@ import {
   SecondContainer,
 } from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Header from "../Header";
 import AllChat from "../AllChats";
 import SelectedChatContainer from "../SelectedChatContainer";
 import ChatNotSelected from "../ChatNotSelected";
+import io from "socket.io-client";
 
 export default function Home() {
-  const { selectedChat } = useContext(ChatContext);
+  const { selectedChat, setSocket } = useContext(ChatContext);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+    setSocket(socket);
+
+    socket.on("connection", (msg) => {
+      console.log(msg);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <MainContainer>
