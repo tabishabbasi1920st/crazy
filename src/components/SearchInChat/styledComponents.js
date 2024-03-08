@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.div`
-  height: 50px;
   width: 100%;
   background-color: #132036;
   display: flex;
   align-items: center;
   padding: 5px 10px 5px 10px;
   gap: 10px;
+  height: 51px;
+  flex-shrink: 0;
 
   button {
     height: 100%;
