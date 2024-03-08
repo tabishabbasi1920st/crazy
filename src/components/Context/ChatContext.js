@@ -6,6 +6,7 @@ const ChatContextProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
   const [searchInChat, setSearchInChat] = useState(false);
+  const [chatList, setChatList] = useState([]);
   const [socket, setSocket] = useState(null);
 
   return (
@@ -19,6 +20,8 @@ const ChatContextProvider = ({ children }) => {
         setSearchInChat,
         socket,
         setSocket,
+        chatList,
+        setChatList,
       }}
     >
       {children}

@@ -1,8 +1,9 @@
 import { MainContainer } from "./styledComponents";
 import { IoSend } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const messageTypeConstants = {
   text: "TEXT",
@@ -14,12 +15,16 @@ const messageTypeConstants = {
   capturedImage: "CAPTURED_IMAGE",
 };
 
+const msgDelieveryStatusConstants = {
+  pending: "PENDING",
+  sent: "SENT",
+  seen: "SEEN",
+};
+
 export default function SendTextMessages() {
   const [msgInput, setMsgInput] = useState("");
-  const { profile, selectedChat, socket } = useContext(ChatContext);
-
-  const sender = profile.email;
-  const receiver = selectedChat.email;
+  const { profile, selectedChat, socket, setChatList } =
+    useContext(ChatContext);
 
   const handleMsgInputChange = (e) => {
     setMsgInput(e.target.value);
@@ -28,17 +33,38 @@ export default function SendTextMessages() {
   const handleMessageSend = () => {
     setMsgInput("");
 
+    const sender = profile.email;
+    const receiver = selectedChat.email;
+
     const newTextMessage = {
+      id: uuidv4(),
       type: messageTypeConstants.text,
       content: msgInput,
       sentBy: sender,
       sentTo: receiver,
       timestamp: Date.now(),
+      delieveryStatus: msgDelieveryStatusConstants.pending,
     };
 
     socket.emit("TextMessage", newTextMessage, (ack) => {
-      console.log("server ack", ack);
+      const { success, msg } = ack;
+      if (success) {
+        setChatList((prevData) =>
+          prevData.map((eachMessage) => {
+            if (eachMessage.id === newTextMessage.id) {
+              return { ...eachMessage, delieveryStatus: msg };
+            } else {
+              return eachMessage;
+            }
+          })
+        );
+      } else {
+        console.error(msg, success);
+      }
     });
+
+    // Update the chatData with the sent text message.
+    setChatList((prevList) => [...prevList, newTextMessage]);
   };
 
   return (
