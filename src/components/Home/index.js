@@ -71,13 +71,11 @@ export default function Home() {
       socket.on("typing", (msg) => {
         const { isTyping, sentBy, sentTo } = msg;
         if (selectedChat.email === sentBy) {
-          setSenderActivity((prevState) => ({
-            ...prevState,
-            typing: isTyping,
-          }));
+          setSenderActivity({ typing: isTyping });
         }
       });
 
+      // listening about new recorded audio messages.
       socket.on("RecordedAudioMessage", (message) => {
         const { _doc } = message;
         if (selectedChat.email === _doc.sentBy) {
@@ -94,6 +92,13 @@ export default function Home() {
             sentBy: profile.email,
             sentTo: _doc.sentBy,
           });
+        }
+      });
+
+      socket.on("recordingAudio", (msg) => {
+        const { sentBy, sentTo, isRecordingAudio } = msg;
+        if (selectedChat.email === sentBy) {
+          setSenderActivity({ recordingAudio: isRecordingAudio });
         }
       });
     }

@@ -9,11 +9,7 @@ const ChatContextProvider = ({ children }) => {
   const [chatList, setChatList] = useState([]);
   const [socket, setSocket] = useState(null);
   const [onlineUsersList, setOnlineUsersList] = useState([]);
-  const [senderActivity, setSenderActivity] = useState({
-    typing: false,
-    recordingAudio: false,
-    recordingVideo: false,
-  });
+  const [senderActivity, setSenderActivity] = useState({});
 
   return (
     <ChatContext.Provider
