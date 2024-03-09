@@ -2,12 +2,23 @@ import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import { ChatContext } from "../Context/ChatContext";
 import TextMessageUi from "../TextMessageUi";
+import RecordedAudioMessageUi from "../RecordedAudioMessageUi";
 
 const apiStatusConstants = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
   failure: "FAILURE",
+};
+
+const messageTypeConstants = {
+  text: "TEXT",
+  audio: "AUDIO",
+  capturedAudio: "CAPTURED_AUDIO",
+  video: "VIDEO",
+  capturedVideo: "CAPTURED_VIDEO",
+  image: "IMAGE",
+  capturedImage: "CAPTURED_IMAGE",
 };
 
 export default function SelectedChatMain() {
@@ -75,9 +86,19 @@ export default function SelectedChatMain() {
         scrollbarColor: "#070b15 transparent",
       }}
     >
-      {chatList.map((eachMsg) => (
-        <TextMessageUi eachTextMessage={eachMsg} />
-      ))}
+      {chatList.map((eachMsg) => {
+        const { type } = eachMsg;
+        switch (type) {
+          case messageTypeConstants.text:
+            return <TextMessageUi eachTextMessage={eachMsg} />;
+          case messageTypeConstants.capturedAudio:
+            return (
+              <RecordedAudioMessageUi eachRecordedAudioMessage={eachMsg} />
+            );
+          default:
+            return null;
+        }
+      })}
     </div>
   );
 }

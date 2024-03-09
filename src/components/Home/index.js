@@ -47,24 +47,56 @@ export default function Home() {
       setOnlineUsersList(onlineUsersList);
     });
 
-    // listening about new text messages.
-    socket.on("TextMessage", (message) => {
-      if (selectedChat.email === message.sentBy) {
-        setChatList((prevList) => [...prevList, message]);
-        console.log("message received", message);
-      }
+    if (selectedChat !== null) {
+      // listening about new text messages.
+      socket.on("TextMessage", (message) => {
+        if (selectedChat.email === message.sentBy) {
+          setChatList((prevList) => [...prevList, message]);
+          console.log("message received", message);
+        }
 
-      // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
+        // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
 
-      if (selectedChat !== null && selectedChat.email === message.sentBy) {
-        console.log("emittingback", selectedChat);
-        socket.emit("NewMsgReaded", {
-          id: message.id,
-          sentBy: profile.email,
-          sentTo: message.sentBy,
-        });
-      }
-    });
+        if (selectedChat !== null && selectedChat.email === message.sentBy) {
+          console.log("emittingback", selectedChat);
+          socket.emit("NewMsgReaded", {
+            id: message.id,
+            sentBy: profile.email,
+            sentTo: message.sentBy,
+          });
+        }
+      });
+
+      // listening event wether sender is typing or not.
+      socket.on("typing", (msg) => {
+        const { isTyping, sentBy, sentTo } = msg;
+        if (selectedChat.email === sentBy) {
+          setSenderActivity((prevState) => ({
+            ...prevState,
+            typing: isTyping,
+          }));
+        }
+      });
+
+      socket.on("RecordedAudioMessage", (message) => {
+        const { _doc } = message;
+        if (selectedChat.email === _doc.sentBy) {
+          setChatList((prevList) => [...prevList, _doc]);
+          console.log("message received", _doc);
+        }
+
+        // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
+
+        if (selectedChat !== null && selectedChat.email === _doc.sentBy) {
+          console.log("emittingback", selectedChat);
+          socket.emit("NewMsgReaded", {
+            id: _doc.id,
+            sentBy: profile.email,
+            sentTo: _doc.sentBy,
+          });
+        }
+      });
+    }
 
     // getting message delivery status like seen by this event.
     socket.on("NewMsgReaded", (msg) => {
@@ -107,17 +139,6 @@ export default function Home() {
         to: selectedChat.email,
       });
     }
-
-    // listening event wether sender is typing or not.
-    socket.on("typing", (msg) => {
-      const { isTyping, sentBy, sentTo } = msg;
-      if (selectedChat.email === sentBy) {
-        setSenderActivity((prevState) => ({
-          ...prevState,
-          typing: isTyping,
-        }));
-      }
-    });
 
     return () => {
       socket.disconnect();
