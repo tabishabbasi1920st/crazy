@@ -7,9 +7,14 @@ import {
   DropUpContainer,
 } from "./styledComponents";
 import { useState } from "react";
+import SendMessageModal from "../SendMessageModal";
 
 export default function ShareMedia() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const handleMediaBtnClick = () => {
     setIsOpen((prevState) => !prevState);
@@ -18,22 +23,31 @@ export default function ShareMedia() {
   // Media handle functions...
   const handlePhotosAndVideos = () => {
     handleMediaBtnClick();
+    openModal();
   };
   const handleAudio = () => {
     handleMediaBtnClick();
+    openModal();
   };
   const handleCapturePhoto = () => {
     handleMediaBtnClick();
+    openModal();
   };
   const handleRecordAudio = () => {
     handleMediaBtnClick();
+    openModal();
   };
   const handleCaptureVideo = () => {
     handleMediaBtnClick();
+    openModal();
   };
 
   return (
     <MainContainer>
+      <SendMessageModal isOpen={isModalOpen} onClose={closeModal}>
+        tabish
+      </SendMessageModal>
+
       <DropUpContainer isOpen={isOpen}>
         <li onClick={handlePhotosAndVideos}>
           <IoImage />
