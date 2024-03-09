@@ -25,11 +25,19 @@ const msgDelieveryStatusConstants = {
   seen: "SEEN",
 };
 
+const apiConstants = {
+  initial: "INITIAL",
+  inProgress: "IN_PROGRESS",
+  success: "SUCCESS",
+  failure: "FAILURE",
+};
+
 export default function SendAudioFileMessages({ onClose }) {
   const [audio, setAudio] = useState(null);
   const [base64Audio, setBase64Audio] = useState(null);
+  const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
-  const { setChatList, socket, selectedChat, profile } =
+  const { setChatList, socket, selectedChat, profile, chatList } =
     useContext(ChatContext);
 
   const AudioFileInputRef = useRef(null);
@@ -50,42 +58,87 @@ export default function SendAudioFileMessages({ onClose }) {
   };
 
   const uploadAudio = async () => {
-    // const apiUrl = "http://localhost:5000/upload-audio";
-    // const options = {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ audio: base64Audio }),
-    // };
-    // const response = await fetch(apiUrl, options);
-    // console.log(response);
+    if (!audio) {
+      console.log("Not audio");
+      return;
+    }
 
-    const message = {
+    const newMessage = {
       id: uuidv4(),
-      type: messageTypeConstants.capturedAudio,
-      content: "tabish",
+      type: messageTypeConstants.audio,
+      content: audio,
       sentBy: profile.email,
       sentTo: selectedChat.email,
       timestamp: Date.now(),
       delieveryStatus: msgDelieveryStatusConstants.pending,
     };
 
-    // Emit the privateAudio event to the server.
-    socket.emit("AudioFileMessage", message, (ack) => {
-      console.log("send record msg ack: ", ack);
-      const { success, message, actualMsg } = ack;
-      if (success) {
-        // Update the chatData with the sent audio message.
-        setChatList((prevList) => [...prevList, actualMsg]);
-      } else {
-        console.error(
-          "Error while getting audio acknowledgment",
-          success,
-          message
-        );
-      }
+    setChatList((prevList) => {
+      const newList = [...prevList, newMessage];
+      return newList;
     });
+
+    try {
+      setApiStatus(apiConstants.inProgress);
+      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/audio`;
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ audio: base64Audio }),
+      };
+
+      const response = await fetch(apiUrl, options);
+      if (response.ok) {
+        const fetchedData = await response.json();
+        const { savedAudioUrl } = fetchedData;
+        console.log("savedAudioUrl", savedAudioUrl);
+        setApiStatus(apiConstants.success);
+
+        // // Emit the privateAudio event to the server.
+        socket.emit(
+          "AudioFileMessage",
+          { ...newMessage, content: savedAudioUrl },
+          (ack) => {
+            console.log("send record msg ack: ", ack);
+            const { success, message, actualMsg } = ack;
+            if (success) {
+              // Update the chatData with the sent audio message.
+              console.log(success, message, actualMsg);
+              setChatList((prevList) =>
+                prevList.map((eachMsg) => {
+                  if (eachMsg.id === actualMsg.id) {
+                    return { ...eachMsg, ...actualMsg };
+                  } else {
+                    return eachMsg;
+                  }
+                })
+              );
+            } else {
+              console.error(
+                "Error while getting audio acknowledgment",
+                success,
+                message
+              );
+            }
+          }
+        );
+      } else {
+        console.log(
+          "Response is not Ok while sending audio file to backend by api"
+        );
+        setApiStatus(apiConstants.failure);
+      }
+    } catch (err) {
+      console.error(
+        "Error while sending audio file to backend to make its url: ",
+        err
+      );
+      setApiStatus(apiConstants.failure);
+    }
+
+    console.log(chatList);
 
     onClose();
   };

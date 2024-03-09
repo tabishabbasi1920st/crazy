@@ -101,6 +101,27 @@ export default function Home() {
           setSenderActivity({ recordingAudio: isRecordingAudio });
         }
       });
+
+      // listening about simple audio messages.
+      socket.on("AudioFileMessage", (msg) => {
+        const { _doc } = msg;
+        console.log("__________doc", _doc);
+        console.log("simple audio message event received: ", msg);
+        if (selectedChat.email === _doc.sentBy) {
+          setChatList((prevList) => [...prevList, _doc]);
+        }
+
+        // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
+
+        if (selectedChat !== null && selectedChat.email === _doc.sentBy) {
+          console.log("emittingback", selectedChat);
+          socket.emit("NewMsgReaded", {
+            id: _doc.id,
+            sentBy: profile.email,
+            sentTo: _doc.sentBy,
+          });
+        }
+      });
     }
 
     // getting message delivery status like seen by this event.

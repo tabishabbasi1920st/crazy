@@ -180,6 +180,7 @@ export default function SendRecordedAudioMessage({ onClose }) {
           const fetchedData = await response.json();
           const { savedAudioUrl } = fetchedData;
           console.log("savedAudioUrl", savedAudioUrl);
+          setApiStatus(apiConstants.success);
 
           // Emit the privateAudio event to the server
           socket.emit(

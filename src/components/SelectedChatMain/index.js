@@ -2,9 +2,10 @@ import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import { ChatContext } from "../Context/ChatContext";
 import TextMessageUi from "../TextMessageUi";
-import RecordedAudioMessageUi from "../RecordedAudioMessageUi";
 import Loader from "../Loader";
 import Failure from "../Failure";
+import RecordedAudioMessageUi from "../RecordedAudioMessageUi";
+import SimpleAudioMessageUi from "../SimpleAudioMessageUi";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -83,6 +84,10 @@ export default function SelectedChatMain() {
             case messageTypeConstants.capturedAudio:
               return (
                 <RecordedAudioMessageUi eachRecordedAudioMessage={eachMsg} />
+              );
+            case messageTypeConstants.audio:
+              return (
+                <SimpleAudioMessageUi eachRecordedAudioMessage={eachMsg} />
               );
             default:
               return null;
