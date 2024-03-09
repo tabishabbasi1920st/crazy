@@ -3,6 +3,7 @@ import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
 import { BiErrorCircle } from "react-icons/bi";
+import Loader from "../Loader";
 
 const msgDelieveryStatusConstants = {
   pending: "PENDING",
@@ -32,7 +33,8 @@ export default function TextMessageUi({ eachTextMessage }) {
       case msgDelieveryStatusConstants.seen:
         return <BsCheckAll color="#fff" />;
       case msgDelieveryStatusConstants.pending:
-        return <BiErrorCircle color="red" />;
+        // return <BiErrorCircle color="red" />;
+        return <Loader height="15px" width="15px" color="white"/>;
     }
   };
 

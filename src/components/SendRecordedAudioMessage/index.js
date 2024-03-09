@@ -30,12 +30,21 @@ const msgDelieveryStatusConstants = {
   seen: "SEEN",
 };
 
+const apiConstants = {
+  initial: "INITIAL",
+  inProgress: "IN_PROGRESS",
+  success: "SUCCESS",
+  failure: "FAILURE",
+};
+
 export default function SendRecordedAudioMessage({ onClose }) {
   // State variables to manage recording and audio playback
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [audioURL, setAudioURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const [base64Audio, setBase64Audio] = useState(null);
+  const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
   const { profile, selectedChat, socket, setChatList } =
     useContext(ChatContext);
@@ -94,9 +103,11 @@ export default function SendRecordedAudioMessage({ onClose }) {
     if (!isRecording && recordedChunks.length > 0) {
       // Create a Blob from the recorded chunks
       const blob = new Blob(recordedChunks, { type: "audio/wav" });
+
       // Create a URL for the Blob and set it as the audio URL
       const url = URL.createObjectURL(blob);
       setAudioURL(url);
+      blobToBase64(blob);
     }
   }, [isRecording, recordedChunks]);
 
@@ -126,12 +137,11 @@ export default function SendRecordedAudioMessage({ onClose }) {
 
   // Helper function to convert Blob to base64
   const blobToBase64 = (blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      setBase64Audio(reader.result.split(",")[1]);
+    };
   };
 
   const handleAudioSent = async () => {
@@ -141,41 +151,72 @@ export default function SendRecordedAudioMessage({ onClose }) {
         return;
       }
 
-      // Create a Blob from the recorded chunks
-      const blob = new Blob(recordedChunks, { type: "audio/wav" });
-
-      // Convert the Blob to base64
-      const base64Audio = await blobToBase64(blob);
-
-      const formData = {
-        uploaded_audio: base64Audio,
-      };
-
-      const message = {
+      const newMessage = {
         id: uuidv4(),
         type: messageTypeConstants.capturedAudio,
-        content: formData,
+        content: audioURL,
         sentBy: profile.email,
         sentTo: selectedChat.email,
         timestamp: Date.now(),
         delieveryStatus: msgDelieveryStatusConstants.pending,
       };
 
-      // Emit the privateAudio event to the server.
-      socket.emit("RecordedAudioMessage", message, (ack) => {
-        console.log("send record msg ack: ", ack);
-        const { success, message, actualMsg } = ack;
-        if (success) {
-          // Update the chatData with the sent audio message.
-          setChatList((prevList) => [...prevList, actualMsg]);
-        } else {
-          console.error(
-            "Error while getting audio acknowledgment",
-            success,
-            message
+      setChatList((prevList) => [...prevList, newMessage]);
+
+      try {
+        // Send the audio message to the server
+        setApiStatus(apiConstants.inProgress);
+        const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/recorded-audio-message`;
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ recordedAudio: base64Audio }),
+        };
+
+        const response = await fetch(apiUrl, options);
+        if (response.ok) {
+          const fetchedData = await response.json();
+          const { savedAudioUrl } = fetchedData;
+          console.log("savedAudioUrl", savedAudioUrl);
+
+          // Emit the privateAudio event to the server
+          socket.emit(
+            "RecordedAudioMessage",
+            { ...newMessage, content: savedAudioUrl },
+            (ack) => {
+              console.log("send record msg ack: ", ack);
+              const { success, message, actualMsg } = ack;
+              if (success) {
+                // Update the chatData with the sent audio message.
+                console.log(success, message, actualMsg);
+                setChatList((prevList) =>
+                  prevList.map((eachMsg) => {
+                    if (eachMsg.id === actualMsg.id) {
+                      return { ...eachMsg, ...actualMsg };
+                    } else {
+                      return eachMsg;
+                    }
+                  })
+                );
+              } else {
+                console.error(
+                  "Error while getting audio acknowledgment",
+                  success,
+                  message
+                );
+              }
+            }
           );
+
+          setApiStatus(apiConstants.success);
+        } else {
+          setApiStatus(apiConstants.failure);
         }
-      });
+      } catch (err) {
+        setApiStatus(apiConstants.failure);
+      }
 
       // Reset the audio recording state
       setRecordedChunks([]);
@@ -210,7 +251,11 @@ export default function SendRecordedAudioMessage({ onClose }) {
           {isRecording ? "Stop" : "Start"}
         </StartButton>
         {recordedChunks.length > 0 && (
-          <SendButton onClick={handleAudioSent}>
+          <SendButton
+            onClick={() => {
+              handleAudioSent();
+            }}
+          >
             <MdSend />
           </SendButton>
         )}

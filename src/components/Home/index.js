@@ -78,9 +78,9 @@ export default function Home() {
       // listening about new recorded audio messages.
       socket.on("RecordedAudioMessage", (message) => {
         const { _doc } = message;
+        console.log("__________doc", _doc);
         if (selectedChat.email === _doc.sentBy) {
           setChatList((prevList) => [...prevList, _doc]);
-          console.log("message received", _doc);
         }
 
         // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.

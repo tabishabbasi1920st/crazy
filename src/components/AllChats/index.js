@@ -110,7 +110,7 @@ export default function AllChat() {
       case apiConstants.success:
         return renderSuccessView();
       case apiConstants.inProgress:
-        return <Loader />;
+        return <Loader height="40px" width="40px" color="white" />;
       default:
         return <Failure />;
     }

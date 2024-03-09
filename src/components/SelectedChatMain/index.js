@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 import { ChatContext } from "../Context/ChatContext";
 import TextMessageUi from "../TextMessageUi";
 import RecordedAudioMessageUi from "../RecordedAudioMessageUi";
+import Loader from "../Loader";
+import Failure from "../Failure";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -70,6 +72,41 @@ export default function SelectedChatMain() {
     }
   }, [chatList]);
 
+  const renderSuccessView = () => {
+    return (
+      <>
+        {chatList.map((eachMsg) => {
+          const { type } = eachMsg;
+          switch (type) {
+            case messageTypeConstants.text:
+              return <TextMessageUi eachTextMessage={eachMsg} />;
+            case messageTypeConstants.capturedAudio:
+              return (
+                <RecordedAudioMessageUi eachRecordedAudioMessage={eachMsg} />
+              );
+            default:
+              return null;
+          }
+        })}
+      </>
+    );
+  };
+
+  const renderAppropriateView = () => {
+    switch (apiStatus) {
+      case apiStatusConstants.initial:
+        return null;
+      case apiStatusConstants.inProgress:
+        return <Loader height="40px" width="40px" color="white" />;
+      case apiStatusConstants.success:
+        return renderSuccessView();
+      case apiStatusConstants.failure:
+        return <Failure />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div
       ref={mainChatContainerRef}
@@ -86,19 +123,7 @@ export default function SelectedChatMain() {
         scrollbarColor: "#070b15 transparent",
       }}
     >
-      {chatList.map((eachMsg) => {
-        const { type } = eachMsg;
-        switch (type) {
-          case messageTypeConstants.text:
-            return <TextMessageUi eachTextMessage={eachMsg} />;
-          case messageTypeConstants.capturedAudio:
-            return (
-              <RecordedAudioMessageUi eachRecordedAudioMessage={eachMsg} />
-            );
-          default:
-            return null;
-        }
-      })}
+      {renderAppropriateView()}
     </div>
   );
 }

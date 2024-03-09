@@ -95,4 +95,8 @@ export const TimeAndStatusCotainer = styled.div`
     color: #94a3b8;
     margin-top: 5px;
   }
+
+  .status {
+    align-self: flex-end;
+  }
 `;

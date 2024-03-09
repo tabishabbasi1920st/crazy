@@ -9,11 +9,19 @@ import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
 import { BiErrorCircle } from "react-icons/bi";
+import Loader from "../Loader";
 
 const msgDelieveryStatusConstants = {
   pending: "PENDING",
   sent: "SENT",
   seen: "SEEN",
+};
+
+const apiConstants = {
+  initial: "INITIAL",
+  inProgress: "IN_PROGRESS",
+  success: "SUCCESS",
+  failure: "FAILURE",
 };
 
 export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
@@ -27,10 +35,16 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
   const minutes = dt.getMinutes().toLocaleString();
   const formattedMinutes = minutes.length < 2 ? `0${minutes}` : minutes;
 
-  const { profile, selectedChat } = useContext(ChatContext);
+  const { profile } = useContext(ChatContext);
 
-  const audioUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
-  console.log(audioUrl);
+  console.log(">>>>>>>>>>>>>>>>>>", content, delieveryStatus);
+
+  let audioUrl = null;
+  if (content.startsWith("blob")) {
+    audioUrl = content;
+  } else {
+    audioUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
+  }
 
   const renderAppropritateIcon = () => {
     switch (delieveryStatus) {
@@ -39,7 +53,8 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
       case msgDelieveryStatusConstants.seen:
         return <BsCheckAll color="#fff" />;
       case msgDelieveryStatusConstants.pending:
-        return <BiErrorCircle color="red" />;
+        // return <BiErrorCircle color="red" />;
+        return <Loader height="15px" width="15px" color="white" />;
     }
   };
 
@@ -53,8 +68,7 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
       </AudioWrapper>
       <TimeAndStatusCotainer>
         <span className="msg-time">{`${formattedHours}:${formattedMinutes} ${amOrPm} `}</span>
-
-        <span>{sentBy === profile.email && renderAppropritateIcon()}</span>
+        <span className="status">{sentBy === profile.email && renderAppropritateIcon()}</span>
       </TimeAndStatusCotainer>
     </MainContainer>
   );

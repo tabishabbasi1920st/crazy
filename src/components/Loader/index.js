@@ -1,12 +1,12 @@
 import { Oval } from "react-loader-spinner";
 
-export default function Loader() {
+export default function Loader({ height, width, color }) {
   return (
     <Oval
       visible={true}
-      height="100%"
-      width="25"
-      color="#fff"
+      height={height}
+      width={width}
+      color={color}
       ariaLabel="oval-loading"
       wrapperStyle={{}}
       wrapperClass=""

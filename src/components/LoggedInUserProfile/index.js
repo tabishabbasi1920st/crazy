@@ -75,7 +75,7 @@ export default function Profile() {
       case apiConstants.success:
         return renderSuccessView();
       case apiConstants.inProgress:
-        return <Loader />;
+        return <Loader height="25px" width="25px" color="white" />;
       default:
         return renderFailureView();
     }

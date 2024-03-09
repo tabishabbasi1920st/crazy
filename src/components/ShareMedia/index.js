@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import SendMessageModal from "../SendMessageModal";
 import SendRecordedAudioMessage from "../SendRecordedAudioMessage";
+import SendAudioFileMessages from "../SendAudioFileMessages";
 
 const modalChildrenConstants = {
   photosAndVideos: "PHOTOS_AND_VIDEOS",
@@ -62,7 +63,7 @@ export default function ShareMedia() {
       case modalChildrenConstants.photosAndVideos:
         return null;
       case modalChildrenConstants.audio:
-        return null;
+        return <SendAudioFileMessages onClose={closeModal} />;
       case modalChildrenConstants.capturePhoto:
         return null;
       case modalChildrenConstants.recordAudio:
