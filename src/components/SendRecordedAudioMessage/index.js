@@ -54,10 +54,11 @@ export default function SendRecordedAudioMessage({ onClose }) {
 
   // useEffect to initialize MediaRecorder and access the user's microphone
   useEffect(() => {
+    let stream;
     const initializeMediaRecorder = async () => {
       try {
         // Request access to the user's microphone
-        const stream = await navigator.mediaDevices.getUserMedia({
+        stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
 
@@ -87,6 +88,14 @@ export default function SendRecordedAudioMessage({ onClose }) {
 
     // Initialize MediaRecorder when the component mounts
     initializeMediaRecorder();
+
+    // Cleanup function to stop the media stream when the component is unmounted
+    return () => {
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+      }
+    };
   }, []);
 
   // useEffect to start/stop MediaRecorder based on the recording state
@@ -213,7 +222,6 @@ export default function SendRecordedAudioMessage({ onClose }) {
 
           setApiStatus(apiConstants.success);
         } else {
-          
         }
       } catch (err) {
         setApiStatus(apiConstants.failure);
