@@ -43,17 +43,26 @@ export default function SendCapturedImageMessage({ onClose }) {
     useContext(ChatContext);
 
   useEffect(() => {
-    startCamera();
-  }, []);
+    let stream;
+    const startCamera = async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoRef.current.srcObject = stream;
+      } catch (error) {
+        console.error("Error accessing camera:", error);
+      }
+    };
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
-    } catch (error) {
-      console.error("Error accessing camera:", error);
-    }
-  };
+    startCamera();
+
+    // Cleanup function to stop the media stream when the component is unmounted
+    return () => {
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   const capture = () => {
     const video = videoRef.current;
