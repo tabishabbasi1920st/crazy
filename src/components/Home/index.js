@@ -143,6 +143,25 @@ export default function Home() {
         }
       });
 
+      socket.on("SimpleImageMessage", (msg) => {
+        const { _doc } = msg;
+        console.log("Simple image message event trigger: ", msg);
+        if (selectedChat.email === _doc.sentBy) {
+          setChatList((prevList) => [...prevList, _doc]);
+        }
+
+        // Emitting back en event NewMsgReaded to the server to tell the user i have seen your message.
+
+        if (selectedChat !== null && selectedChat.email === _doc.sentBy) {
+          console.log("emittingback", selectedChat);
+          socket.emit("NewMsgReaded", {
+            id: _doc.id,
+            sentBy: profile.email,
+            sentTo: _doc.sentBy,
+          });
+        }
+      });
+
       // end of if..
     }
 

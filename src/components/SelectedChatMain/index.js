@@ -7,6 +7,7 @@ import Failure from "../Failure";
 import RecordedAudioMessageUi from "../RecordedAudioMessageUi";
 import SimpleAudioMessageUi from "../SimpleAudioMessageUi";
 import RecordedVideoMessageUi from "../RecordedVideoMessageUi";
+import SimpleImageMessageUi from "../SimpleImageMessageUi";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -94,6 +95,8 @@ export default function SelectedChatMain() {
               return (
                 <RecordedVideoMessageUi eachRecordedVideoMessage={eachMsg} />
               );
+            case messageTypeConstants.image:
+              return <SimpleImageMessageUi eachSimpleImageMessage={eachMsg} />;
             default:
               return null;
           }

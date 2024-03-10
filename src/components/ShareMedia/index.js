@@ -1,6 +1,7 @@
 import { FaPlus, FaCamera } from "react-icons/fa";
 import { IoImage, IoMicOutline, IoVideocamOutline } from "react-icons/io5";
 import { MdOutlineAudiotrack } from "react-icons/md";
+import { RiFolderVideoFill } from "react-icons/ri";
 import {
   MainContainer,
   MediaButton,
@@ -11,9 +12,11 @@ import SendMessageModal from "../SendMessageModal";
 import SendRecordedAudioMessage from "../SendRecordedAudioMessage";
 import SendAudioFileMessages from "../SendAudioFileMessages";
 import SendRecordedVideoMessages from "../SendRecordedVideoMessages";
+import SendSimplePhoto from "../SendSimplePhoto";
 
 const modalChildrenConstants = {
-  photosAndVideos: "PHOTOS_AND_VIDEOS",
+  photos: "PHOTOS",
+  videos: "VIDEOS",
   audio: "AUDIO",
   capturePhoto: "CAPTURE_PHOTO",
   recordAudio: "RECORD_AUDIO",
@@ -33,11 +36,18 @@ export default function ShareMedia() {
   };
 
   // Media handle functions...
-  const handlePhotosAndVideos = () => {
+  const handlePhotos = () => {
     handleMediaBtnClick();
     openModal();
-    setModalChildren(modalChildrenConstants.photosAndVideos);
+    setModalChildren(modalChildrenConstants.photos);
   };
+
+  const handleVideos = () => {
+    handleMediaBtnClick();
+    openModal();
+    setModalChildren(modalChildrenConstants.videos);
+  };
+
   const handleAudio = () => {
     handleMediaBtnClick();
     openModal();
@@ -61,7 +71,9 @@ export default function ShareMedia() {
 
   const getAppropriateChildren = () => {
     switch (modalChildren) {
-      case modalChildrenConstants.photosAndVideos:
+      case modalChildrenConstants.photos:
+        return <SendSimplePhoto onClose={closeModal} />;
+      case modalChildrenConstants.videos:
         return null;
       case modalChildrenConstants.audio:
         return <SendAudioFileMessages onClose={closeModal} />;
@@ -83,9 +95,13 @@ export default function ShareMedia() {
       </SendMessageModal>
 
       <DropUpContainer isOpen={isOpen}>
-        <li onClick={handlePhotosAndVideos}>
+        <li onClick={handlePhotos}>
           <IoImage />
-          <p>Photos & Videos</p>
+          <p>Photos</p>
+        </li>
+        <li onClick={handleVideos}>
+          <RiFolderVideoFill />
+          <p>Videos</p>
         </li>
         <li onClick={handleAudio}>
           <MdOutlineAudiotrack />
