@@ -213,7 +213,7 @@ export default function SendRecordedAudioMessage({ onClose }) {
 
           setApiStatus(apiConstants.success);
         } else {
-          setApiStatus(apiConstants.failure);
+          
         }
       } catch (err) {
         setApiStatus(apiConstants.failure);

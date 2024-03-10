@@ -10,6 +10,7 @@ import { useState } from "react";
 import SendMessageModal from "../SendMessageModal";
 import SendRecordedAudioMessage from "../SendRecordedAudioMessage";
 import SendAudioFileMessages from "../SendAudioFileMessages";
+import SendRecordedVideoMessages from "../SendRecordedVideoMessages";
 
 const modalChildrenConstants = {
   photosAndVideos: "PHOTOS_AND_VIDEOS",
@@ -69,7 +70,7 @@ export default function ShareMedia() {
       case modalChildrenConstants.recordAudio:
         return <SendRecordedAudioMessage onClose={closeModal} />;
       case modalChildrenConstants.captureVideo:
-        return null;
+        return <SendRecordedVideoMessages onClose={closeModal} />;
       default:
         return null;
     }
@@ -103,7 +104,7 @@ export default function ShareMedia() {
           <p>Capture Video</p>
         </li>
       </DropUpContainer>
-      <MediaButton onClick={handleMediaBtnClick}>
+      <MediaButton disabled={isModalOpen} onClick={handleMediaBtnClick}>
         <FaPlus />
       </MediaButton>
     </MainContainer>

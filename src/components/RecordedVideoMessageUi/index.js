@@ -1,7 +1,7 @@
 import {
   MainContainer,
-  Audio,
-  AudioWrapper,
+  Video,
+  VideoWrapper,
   Tag,
   TimeAndStatusCotainer,
 } from "./styledComponents";
@@ -34,9 +34,9 @@ const messageTypeConstants = {
   capturedImage: "CAPTURED_IMAGE",
 };
 
-export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
+export default function RecordedAudioMessageUi({ eachRecordedVideoMessage }) {
   const { content, timestamp, sentBy, delieveryStatus } =
-    eachRecordedAudioMessage;
+    eachRecordedVideoMessage;
 
   const dt = new Date(timestamp);
   const hour = dt.getHours();
@@ -47,12 +47,11 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
 
   const { profile } = useContext(ChatContext);
 
-
-  let audioUrl = null;
+  let videoUrl = null;
   if (content.startsWith("blob")) {
-    audioUrl = content;
+    videoUrl = content;
   } else {
-    audioUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
+    videoUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
   }
 
   const renderAppropritateIcon = () => {
@@ -73,9 +72,9 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
         <i>Recorded</i>
       </Tag>
 
-      <AudioWrapper>
-        <Audio controls src={audioUrl} />
-      </AudioWrapper>
+      <VideoWrapper>
+        <Video controls src={videoUrl} />
+      </VideoWrapper>
       <TimeAndStatusCotainer>
         <span className="msg-time">{`${formattedHours}:${formattedMinutes} ${amOrPm} `}</span>
         <span className="status">
