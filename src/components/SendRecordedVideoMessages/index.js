@@ -47,9 +47,10 @@ export default function CameraRecording({ onClose }) {
     useContext(ChatContext);
 
   useEffect(() => {
+    let stream;
     try {
       const initializeVideoRecorder = async () => {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
@@ -74,6 +75,13 @@ export default function CameraRecording({ onClose }) {
     } catch (error) {
       console.error("Error while accessing permission to record video.");
     }
+
+    // Cleanup function to stop the media stream when the component is unmounted
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
   }, []);
 
   useEffect(() => {
