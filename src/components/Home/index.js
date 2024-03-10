@@ -102,6 +102,13 @@ export default function Home() {
         }
       });
 
+      socket.on("recordingVideo", (msg) => {
+        const { sentBy, sentTo, isRecordingVideo } = msg;
+        if (selectedChat.email === sentBy) {
+          setSenderActivity({ recordingVideo: isRecordingVideo });
+        }
+      });
+
       // listening about simple audio messages.
       socket.on("AudioFileMessage", (msg) => {
         const { _doc } = msg;

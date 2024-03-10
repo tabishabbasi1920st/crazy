@@ -116,10 +116,23 @@ export default function CameraRecording({ onClose }) {
     setVideoUrl(null);
     setRecordedChunks([]);
     setIsRecording(true);
+
+    // Emit a "recordingVideo" event to the server
+    socket.emit("recordingVideo", {
+      sentBy: profile.email,
+      sentTo: selectedChat.email,
+      isRecordingVideo: true,
+    });
   };
 
   const stopRecording = () => {
     setIsRecording(false);
+    // Emit a "recordingVideo" event to the server
+    socket.emit("recordingVideo", {
+      sentBy: profile.email,
+      sentTo: selectedChat.email,
+      isRecordingVideo: false,
+    });
   };
 
   const uploadVideo = async () => {
