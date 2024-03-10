@@ -47,29 +47,33 @@ export default function CameraRecording({ onClose }) {
     useContext(ChatContext);
 
   useEffect(() => {
-    const initializeVideoRecorder = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      videoRef.current.srcObject = stream;
+    try {
+      const initializeVideoRecorder = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        videoRef.current.srcObject = stream;
 
-      const recorder = new MediaRecorder(stream);
+        const recorder = new MediaRecorder(stream);
 
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          setRecordedChunks((prevData) => [...prevData, e.data]);
-        }
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) {
+            setRecordedChunks((prevData) => [...prevData, e.data]);
+          }
+        };
+
+        recorder.onstop = () => {
+          setIsRecording(false);
+        };
+
+        setMediaRecorder(recorder);
       };
 
-      recorder.onstop = () => {
-        setIsRecording(false);
-      };
-
-      setMediaRecorder(recorder);
-    };
-
-    initializeVideoRecorder();
+      initializeVideoRecorder();
+    } catch (error) {
+      console.error("Error while accessing permission to record video.");
+    }
   }, []);
 
   useEffect(() => {

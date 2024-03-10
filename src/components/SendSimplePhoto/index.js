@@ -149,17 +149,6 @@ export default function SendSimplePhoto({ onClose }) {
       setApiStatus(apiConstants.failure);
     }
 
-    // const apiUrl = "http://localhost:5000/upload-image";
-    // const options = {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ image: base64Image }),
-    // };
-
-    // const response = await fetch(apiUrl, options);
-    // console.log(response);
   };
 
   return (

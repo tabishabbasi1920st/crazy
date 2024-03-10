@@ -8,6 +8,8 @@ import RecordedAudioMessageUi from "../RecordedAudioMessageUi";
 import SimpleAudioMessageUi from "../SimpleAudioMessageUi";
 import RecordedVideoMessageUi from "../RecordedVideoMessageUi";
 import SimpleImageMessageUi from "../SimpleImageMessageUi";
+import SimpleVideoMessageUi from "../SimpleVideoMessageUi";
+import CapturedImageMessageUi from "../CapturedImageMessageUi";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -97,6 +99,12 @@ export default function SelectedChatMain() {
               );
             case messageTypeConstants.image:
               return <SimpleImageMessageUi eachSimpleImageMessage={eachMsg} />;
+            case messageTypeConstants.video:
+              return <SimpleVideoMessageUi eachSimpleVideoMessage={eachMsg} />;
+            case messageTypeConstants.capturedImage:
+              return (
+                <CapturedImageMessageUi eachCapturedImageMessage={eachMsg} />
+              );
             default:
               return null;
           }

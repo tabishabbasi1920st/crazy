@@ -13,6 +13,8 @@ import SendRecordedAudioMessage from "../SendRecordedAudioMessage";
 import SendAudioFileMessages from "../SendAudioFileMessages";
 import SendRecordedVideoMessages from "../SendRecordedVideoMessages";
 import SendSimplePhoto from "../SendSimplePhoto";
+import SendSimpleVideoMessage from "../SendSimpleVideoMessage";
+import SendCapturedImageMessage from "../SendCapturedImageMessage";
 
 const modalChildrenConstants = {
   photos: "PHOTOS",
@@ -74,11 +76,11 @@ export default function ShareMedia() {
       case modalChildrenConstants.photos:
         return <SendSimplePhoto onClose={closeModal} />;
       case modalChildrenConstants.videos:
-        return null;
+        return <SendSimpleVideoMessage onClose={closeModal} />;
       case modalChildrenConstants.audio:
         return <SendAudioFileMessages onClose={closeModal} />;
       case modalChildrenConstants.capturePhoto:
-        return null;
+        return <SendCapturedImageMessage onClose={closeModal} />;
       case modalChildrenConstants.recordAudio:
         return <SendRecordedAudioMessage onClose={closeModal} />;
       case modalChildrenConstants.captureVideo:

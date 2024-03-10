@@ -1,13 +1,15 @@
-import { ChatContext } from "../Context/ChatContext";
-import { useContext, useState, useRef } from "react";
 import {
   MainContainer,
-  CustomButton,
-  AudioWrapperContainer,
+  VideoWrapper,
+  Video,
+  SelectBtn,
+  SendBtn,
   ButtonsContainer,
 } from "./styledComponents";
+import { useState, useRef, useContext } from "react";
 import { MdSend } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
+import { ChatContext } from "../Context/ChatContext";
 
 const messageTypeConstants = {
   text: "TEXT",
@@ -32,17 +34,17 @@ const apiConstants = {
   failure: "FAILURE",
 };
 
-export default function SendAudioFileMessages({ onClose }) {
-  const [audio, setAudio] = useState(null);
-  const [base64Audio, setBase64Audio] = useState(null);
+export default function SendSimpleVideoMessage({ onClose }) {
+  const [video, setVideo] = useState(null);
+  const [base64Video, setBase64Video] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
-  const { setChatList, socket, selectedChat, profile, chatList } =
+  const { profile, setChatList, selectedChat, socket } =
     useContext(ChatContext);
 
-  const AudioFileInputRef = useRef(null);
+  const videoInputRef = useRef(null);
 
-  const handleAudioFileChange = (e) => {
+  const handleVideoChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
@@ -50,63 +52,59 @@ export default function SendAudioFileMessages({ onClose }) {
       reader.readAsDataURL(file);
 
       reader.onloadend = () => {
-        console.log("loading completed...");
-        setAudio(reader.result);
-        setBase64Audio(reader.result.split(",")[1]);
+        console.log("loading completed ");
+        setVideo(reader.result);
+        setBase64Video(reader.result.split(",")[1]);
       };
     }
   };
 
-  const uploadAudio = async () => {
-    if (!audio) {
-      console.log("Not audio");
+  const uploadVideo = async () => {
+    if (!base64Video) {
+      console.error("No base64 video in simple video sender");
       return;
     }
 
     const newMessage = {
       id: uuidv4(),
-      type: messageTypeConstants.audio,
-      content: audio,
+      type: messageTypeConstants.video,
+      content: video,
       sentBy: profile.email,
       sentTo: selectedChat.email,
       timestamp: Date.now(),
       delieveryStatus: msgDelieveryStatusConstants.pending,
     };
 
-    setChatList((prevList) => {
-      const newList = [...prevList, newMessage];
-      return newList;
-    });
-
+    setChatList((prevList) => [...prevList, newMessage]);
     onClose();
 
     try {
-      setApiStatus(apiConstants.inProgress);
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/audio`;
+      // Send the audio message to the server.
+      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/simple-video-message`;
       const options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ audio: base64Audio }),
+        body: JSON.stringify({ video: base64Video }),
       };
 
       const response = await fetch(apiUrl, options);
       if (response.ok) {
         const fetchedData = await response.json();
-        const { savedAudioUrl } = fetchedData;
-        console.log("savedAudioUrl", savedAudioUrl);
+        const { savedVideoUrl } = fetchedData;
+        console.log("savedVideoUrl", savedVideoUrl);
         setApiStatus(apiConstants.success);
 
-        // // Emit the privateAudio event to the server.
+        // Emit the  RecordedVideoMessage event to the server.
         socket.emit(
-          "AudioFileMessage",
-          { ...newMessage, content: savedAudioUrl },
+          "SimpleVideoMessage",
+          { ...newMessage, content: savedVideoUrl },
           (ack) => {
             console.log("send record msg ack: ", ack);
             const { success, message, actualMsg } = ack;
             if (success) {
-              // Update the chatData with the sent audio message.
+              // Update the chatData with the sent recordedVideoMessage message.
               console.log(success, message, actualMsg);
               setChatList((prevList) =>
                 prevList.map((eachMsg) => {
@@ -127,47 +125,35 @@ export default function SendAudioFileMessages({ onClose }) {
           }
         );
       } else {
-        console.log(
-          "Response is not Ok while sending audio file to backend by api"
-        );
         setApiStatus(apiConstants.failure);
       }
     } catch (err) {
-      console.error(
-        "Error while sending audio file to backend to make its url: ",
-        err
-      );
       setApiStatus(apiConstants.failure);
     }
-
-    console.log(chatList);
   };
 
   return (
     <MainContainer className="App">
-      <p>Select Audio File</p>
-      <ButtonsContainer>
-        <CustomButton onClick={() => AudioFileInputRef.current.click()}>
-          {audio ? "Select Again" : "Select"}
-        </CustomButton>
-        {base64Audio && (
-          <CustomButton backgroundcolor="#e11d48" onClick={uploadAudio}>
-            <MdSend fontSize={30} />
-          </CustomButton>
-        )}
-      </ButtonsContainer>
+      <VideoWrapper>
+        <Video src={video} controls />
+      </VideoWrapper>
       <input
-        ref={AudioFileInputRef}
+        ref={videoInputRef}
         style={{ display: "none" }}
         type="file"
-        accept="audio/*"
-        onChange={handleAudioFileChange}
+        accept="video/*"
+        onChange={handleVideoChange}
       />
-      {audio && (
-        <AudioWrapperContainer>
-          <audio src={audio} controls />
-        </AudioWrapperContainer>
-      )}
+      <ButtonsContainer>
+        <SelectBtn onClick={() => videoInputRef.current.click()}>
+          Select
+        </SelectBtn>
+        {base64Video !== null && (
+          <SendBtn onClick={uploadVideo}>
+            <MdSend />
+          </SendBtn>
+        )}
+      </ButtonsContainer>
     </MainContainer>
   );
 }

@@ -1,13 +1,14 @@
-import { ChatContext } from "../Context/ChatContext";
-import { useContext, useState, useRef } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import {
   MainContainer,
-  CustomButton,
-  AudioWrapperContainer,
-  ButtonsContainer,
+  ControllPanel,
+  CameraAndImgContainer,
+  SendBtn,
+  CaptureBtn,
 } from "./styledComponents";
 import { MdSend } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
+import { ChatContext } from "../Context/ChatContext";
 
 const messageTypeConstants = {
   text: "TEXT",
@@ -32,41 +33,52 @@ const apiConstants = {
   failure: "FAILURE",
 };
 
-export default function SendAudioFileMessages({ onClose }) {
-  const [audio, setAudio] = useState(null);
-  const [base64Audio, setBase64Audio] = useState(null);
+export default function SendCapturedImageMessage({ onClose }) {
+  const videoRef = useRef(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
-  const { setChatList, socket, selectedChat, profile, chatList } =
+  const { profile, selectedChat, socket, setChatList } =
     useContext(ChatContext);
 
-  const AudioFileInputRef = useRef(null);
+  useEffect(() => {
+    startCamera();
+  }, []);
 
-  const handleAudioFileChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onloadend = () => {
-        console.log("loading completed...");
-        setAudio(reader.result);
-        setBase64Audio(reader.result.split(",")[1]);
-      };
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+    } catch (error) {
+      console.error("Error accessing camera:", error);
     }
   };
 
-  const uploadAudio = async () => {
-    if (!audio) {
-      console.log("Not audio");
+  const capture = () => {
+    const video = videoRef.current;
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext("2d");
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const capturedImageSrc = canvas.toDataURL("image/jpeg");
+    const base64Data = capturedImageSrc.split(",")[1];
+    setBase64Image(base64Data);
+    setImageSrc(capturedImageSrc);
+  };
+
+  const handleUpload = async () => {
+    if (!imageSrc) {
+      console.log("Not captured image");
       return;
     }
 
     const newMessage = {
       id: uuidv4(),
-      type: messageTypeConstants.audio,
-      content: audio,
+      type: messageTypeConstants.capturedImage,
+      content: imageSrc,
       sentBy: profile.email,
       sentTo: selectedChat.email,
       timestamp: Date.now(),
@@ -82,26 +94,26 @@ export default function SendAudioFileMessages({ onClose }) {
 
     try {
       setApiStatus(apiConstants.inProgress);
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/audio`;
+      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/captured-image`;
       const options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ audio: base64Audio }),
+        body: JSON.stringify({ capturedImage: base64Image }),
       };
 
       const response = await fetch(apiUrl, options);
       if (response.ok) {
         const fetchedData = await response.json();
-        const { savedAudioUrl } = fetchedData;
-        console.log("savedAudioUrl", savedAudioUrl);
+        const { savedCapturedImageUrl } = fetchedData;
+        console.log("savedCapturedImageUrl", savedCapturedImageUrl);
         setApiStatus(apiConstants.success);
 
         // // Emit the privateAudio event to the server.
         socket.emit(
-          "AudioFileMessage",
-          { ...newMessage, content: savedAudioUrl },
+          "CapturedImageMessage",
+          { ...newMessage, content: savedCapturedImageUrl },
           (ack) => {
             console.log("send record msg ack: ", ack);
             const { success, message, actualMsg } = ack;
@@ -139,35 +151,23 @@ export default function SendAudioFileMessages({ onClose }) {
       );
       setApiStatus(apiConstants.failure);
     }
-
-    console.log(chatList);
   };
 
   return (
-    <MainContainer className="App">
-      <p>Select Audio File</p>
-      <ButtonsContainer>
-        <CustomButton onClick={() => AudioFileInputRef.current.click()}>
-          {audio ? "Select Again" : "Select"}
-        </CustomButton>
-        {base64Audio && (
-          <CustomButton backgroundcolor="#e11d48" onClick={uploadAudio}>
-            <MdSend fontSize={30} />
-          </CustomButton>
+    <MainContainer>
+      <CameraAndImgContainer>
+        <video className="video" ref={videoRef} autoPlay playsInline />
+
+        {imageSrc && <img src={imageSrc} alt="Captured" />}
+      </CameraAndImgContainer>
+      <ControllPanel>
+        <CaptureBtn onClick={capture}>Capture</CaptureBtn>
+        {imageSrc !== null && (
+          <SendBtn onClick={handleUpload}>
+            <MdSend />
+          </SendBtn>
         )}
-      </ButtonsContainer>
-      <input
-        ref={AudioFileInputRef}
-        style={{ display: "none" }}
-        type="file"
-        accept="audio/*"
-        onChange={handleAudioFileChange}
-      />
-      {audio && (
-        <AudioWrapperContainer>
-          <audio src={audio} controls />
-        </AudioWrapperContainer>
-      )}
+      </ControllPanel>
     </MainContainer>
   );
 }

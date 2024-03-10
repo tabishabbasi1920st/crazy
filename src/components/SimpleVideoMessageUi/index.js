@@ -34,9 +34,9 @@ const messageTypeConstants = {
   capturedImage: "CAPTURED_IMAGE",
 };
 
-export default function RecordedVideoMessageUi({ eachRecordedVideoMessage }) {
+export default function SimpleVideoMessageUi({ eachSimpleVideoMessage }) {
   const { content, timestamp, sentBy, delieveryStatus } =
-    eachRecordedVideoMessage;
+    eachSimpleVideoMessage;
 
   const dt = new Date(timestamp);
   const hour = dt.getHours();
@@ -48,7 +48,7 @@ export default function RecordedVideoMessageUi({ eachRecordedVideoMessage }) {
   const { profile } = useContext(ChatContext);
 
   let videoUrl = null;
-  if (content.startsWith("blob")) {
+  if (content.startsWith("data")) {
     videoUrl = content;
   } else {
     videoUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
@@ -68,10 +68,6 @@ export default function RecordedVideoMessageUi({ eachRecordedVideoMessage }) {
 
   return (
     <MainContainer sentBy={sentBy} profile={profile}>
-      <Tag>
-        <i>Recorded</i>
-      </Tag>
-
       <VideoWrapper>
         <Video controls src={videoUrl} />
       </VideoWrapper>
