@@ -32,6 +32,7 @@ export default function Home() {
     onlineUsersList,
     setOnlineUsersList,
     customizationSidebar,
+    setCustomizationSidebar,
   } = useContext(ChatContext);
 
   useEffect(() => {
@@ -264,7 +265,16 @@ export default function Home() {
       <Header />
       {/* This body container will show only in small devices */}
       <BodyContainerSm>
-        {selectedChat === null ? <AllChat /> : <SelectedChatContainer />}
+        {selectedChat === null ? (
+          <AllChat />
+        ) : (
+          <>
+            <SelectedChatContainer />
+            {customizationSidebar && (
+              <CustomizationSidebar isOpenInSmall={true} />
+            )}
+          </>
+        )}
       </BodyContainerSm>
       {/* This body container will show only in large devices */}
       <BodyContainerLg>

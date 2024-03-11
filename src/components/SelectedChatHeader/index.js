@@ -71,7 +71,10 @@ export default function SelectedChatHeader() {
         <SearchChatBtn onClick={() => setSearchInChat(true)}>
           <FaSearch />
         </SearchChatBtn>
-        <WindowButton isOpen={customizationSidebar} onClick={handleWindowButtonClick}>
+        <WindowButton
+          isOpen={customizationSidebar}
+          onClick={handleWindowButtonClick}
+        >
           <FaRegWindowMaximize />
         </WindowButton>
       </OptionsContainer>

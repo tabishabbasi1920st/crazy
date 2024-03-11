@@ -23,10 +23,12 @@ const tileOptions = [
   {
     id: "MEDIA",
     name: "Media",
+    icon: <MdOutlinePermMedia fontSize={25} />,
   },
   {
     id: "OPTIONS",
     name: "Options",
+    icon: <IoOptionsOutline fontSize={25} />,
   },
 ];
 
@@ -35,7 +37,7 @@ const tileIdConstants = {
   options: "OPTIONS",
 };
 
-export default function CustomizationSidebar() {
+export default function CustomizationSidebar({ isOpenInSmall }) {
   const { selectedChat, senderActivity, onlineUsersList } =
     useContext(ChatContext);
   const imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${selectedChat.imageUrl}`;
@@ -69,14 +71,14 @@ export default function CustomizationSidebar() {
   };
 
   return (
-    <MainContainer>
+    <MainContainer isOpenInSmall={isOpenInSmall}>
       <BannerImgContainer backgroundimage={BannerImageUrl} />
       <BodyContainer>
         <DpUserNameAndStatusContainer>
           <DpContainer>
             <DpBgContainer backgroundimage={imageUrl} />
           </DpContainer>
-          <Username>KalaBassa</Username>
+          <Username>{selectedChat.name}</Username>
           <ActiveStatus>{isActive ? "Online" : "Offline"}</ActiveStatus>
           <ActiveStatus>{getAppropSenderActivity()}</ActiveStatus>
         </DpUserNameAndStatusContainer>
@@ -87,7 +89,7 @@ export default function CustomizationSidebar() {
               isselected={selectedTileId === eachTile.id}
               key={eachTile.id}
             >
-              <MdOutlinePermMedia fontSize={25} />
+              {eachTile.icon}
               {eachTile.name}
             </MediaTile>
           ))}

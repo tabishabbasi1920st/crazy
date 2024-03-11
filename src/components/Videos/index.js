@@ -68,6 +68,10 @@ export default function Images() {
     );
   };
 
+  const renderEmptyListView = () => {
+    return <div>No Videos</div>;
+  };
+
   const renderAppropView = () => {
     switch (apiStatus) {
       case apiConstants.initial:
@@ -83,5 +87,10 @@ export default function Images() {
     }
   };
 
-  return <MainContainer>{renderAppropView()}</MainContainer>;
+  return (
+    <MainContainer>
+      {renderAppropView()}
+      {videoList.length === 0 && renderEmptyListView()}
+    </MainContainer>
+  );
 }

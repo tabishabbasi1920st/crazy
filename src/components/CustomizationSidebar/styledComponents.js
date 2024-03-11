@@ -1,22 +1,22 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.div`
-  display: none;
+  position: ${({ isOpenInSmall }) => (isOpenInSmall ? "absolute" : "")};
+  left: ${({ isOpenInSmall }) => (isOpenInSmall ? "0" : "")};
   flex-shrink: 0;
   background-color: #132036;
-  @media screen and (min-width: 1200px) {
-    display: flex;
-    flex-direction: column;
-    min-width: 320px;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  height: calc(100vh - 70px);
+  width: 220px;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
 
-    &::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      background-color: #070b15;
-    }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #070b15;
   }
 `;
 
