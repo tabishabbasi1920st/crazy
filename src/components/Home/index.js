@@ -7,11 +7,12 @@ import {
 } from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
 import { useContext, useEffect } from "react";
+import io from "socket.io-client";
 import Header from "../Header";
 import AllChat from "../AllChats";
 import SelectedChatContainer from "../SelectedChatContainer";
 import ChatNotSelected from "../ChatNotSelected";
-import io from "socket.io-client";
+import CustomizationSidebar from "../CustomizationSidebar";
 
 const msgDelieveryStatusConstants = {
   pending: "PENDING",
@@ -30,6 +31,7 @@ export default function Home() {
     setSenderActivity,
     onlineUsersList,
     setOnlineUsersList,
+    customizationSidebar,
   } = useContext(ChatContext);
 
   useEffect(() => {
@@ -276,6 +278,7 @@ export default function Home() {
             <SelectedChatContainer />
           )}
         </SecondContainer>
+        {customizationSidebar && <CustomizationSidebar />}
       </BodyContainerLg>
     </MainContainer>
   );

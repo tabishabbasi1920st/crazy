@@ -38,7 +38,7 @@ export default function SelectedChatMain() {
   useEffect(() => {
     const gettingChats = async () => {
       setApiStatus(apiStatusConstants.inProgress);
-      const apiUrl = `http://localhost:5000/my-chats?me=${profile.email}&to=${selectedChat.email}`;
+      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/my-chats?me=${profile.email}&to=${selectedChat.email}`;
       const options = {
         method: "GET",
         headers: {

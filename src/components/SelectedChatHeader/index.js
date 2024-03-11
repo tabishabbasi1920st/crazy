@@ -23,6 +23,8 @@ export default function SelectedChatHeader() {
     setSearchInChat,
     onlineUsersList,
     senderActivity,
+    customizationSidebar,
+    setCustomizationSidebar,
   } = useContext(ChatContext);
 
   const { imageUrl, name } = selectedChat;
@@ -48,6 +50,10 @@ export default function SelectedChatHeader() {
     return event;
   };
 
+  const handleWindowButtonClick = () => {
+    setCustomizationSidebar((prevState) => !prevState);
+  };
+
   return (
     <MainContainer>
       <ExitButton onClick={handleExitButtonClick}>
@@ -65,7 +71,7 @@ export default function SelectedChatHeader() {
         <SearchChatBtn onClick={() => setSearchInChat(true)}>
           <FaSearch />
         </SearchChatBtn>
-        <WindowButton>
+        <WindowButton isOpen={customizationSidebar} onClick={handleWindowButtonClick}>
           <FaRegWindowMaximize />
         </WindowButton>
       </OptionsContainer>

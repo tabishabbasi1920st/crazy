@@ -106,11 +106,12 @@ export const WindowButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #203047;
   border: none;
-  color: #4e5d73;
   border-radius: 5px;
   transform: rotate(90deg);
+
+  color: ${({ isOpen }) => (isOpen ? "#326dec" : "#4e5d73")};
+  background-color: ${({ isOpen }) => (isOpen ? "#bfdbfe" : "#203047")};
 
   &:hover {
     background-color: #bfdbfe;

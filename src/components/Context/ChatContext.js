@@ -10,6 +10,7 @@ const ChatContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsersList, setOnlineUsersList] = useState([]);
   const [senderActivity, setSenderActivity] = useState({});
+  const [customizationSidebar, setCustomizationSidebar] = useState(false);
 
   return (
     <ChatContext.Provider
@@ -28,6 +29,8 @@ const ChatContextProvider = ({ children }) => {
         setSenderActivity,
         onlineUsersList,
         setOnlineUsersList,
+        customizationSidebar,
+        setCustomizationSidebar,
       }}
     >
       {children}

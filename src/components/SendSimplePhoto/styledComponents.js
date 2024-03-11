@@ -35,6 +35,7 @@ export const ChooseImageBtn = styled.button`
   background-color: #203047;
   color: #fff;
   padding: 10px;
+  cursor: pointer;
 `;
 
 export const SendImageBtn = styled.button`
@@ -46,7 +47,5 @@ export const SendImageBtn = styled.button`
   background-color: #e11d48;
   color: #fff;
   padding: 10px;
-  &:disabled{
-    color:
-  }
+  cursor: pointer;
 `;
