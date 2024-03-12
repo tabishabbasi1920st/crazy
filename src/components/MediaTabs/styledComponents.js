@@ -13,10 +13,11 @@ export const TabContainer = styled.ul`
   border-bottom: 1px solid #2a364b;
   display: flex;
   align-items: flex-start;
-  max-width: 320px;
+  justify-content: space-between;
+  width: 100%;
   gap: 10px;
   /* border: 2px solid red; */
-  padding: 0px 0px 0px 10px;
+  padding: 0px 5px 0px 5px;
 `;
 
 export const TabItem = styled.li`

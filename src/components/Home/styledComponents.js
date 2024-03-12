@@ -33,6 +33,7 @@ export const BodyContainerLg = styled.div`
 
 export const FirstContainer = styled.div`
   /* border: 2px solid grey; */
+  flex-shrink: 0;
   width: 320px;
   display: flex;
 `;

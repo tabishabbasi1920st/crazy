@@ -21,7 +21,7 @@ export const MainContainer = styled.div`
 `;
 
 export const BannerImgContainer = styled.div`
-  height: 160px;
+  height: 140px;
   width: 100%;
   border-bottom: 1px solid #234d6a;
   background-image: url(${({ backgroundimage }) => backgroundimage});
@@ -29,6 +29,7 @@ export const BannerImgContainer = styled.div`
   background-position: center;
   z-index: 100;
   /* border: 2px solid red; */
+  flex-shrink: 0;
 `;
 
 export const BodyContainer = styled.div`

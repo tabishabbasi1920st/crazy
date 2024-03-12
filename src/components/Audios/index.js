@@ -1,4 +1,4 @@
-import { MainContainer } from "./styledComponents";
+import { MainContainer, EmptyListContainer } from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
 import { useContext, useEffect, useState } from "react";
 import Loader from "../Loader";
@@ -69,7 +69,11 @@ export default function Images() {
   };
 
   const renderEmptyListView = () => {
-    return <div>No Audios</div>;
+    return (
+      <EmptyListContainer>
+        <p>No Audio</p>
+      </EmptyListContainer>
+    );
   };
 
   const renderAppropView = () => {
@@ -77,7 +81,7 @@ export default function Images() {
       case apiConstants.initial:
         return null;
       case apiConstants.inProgress:
-        return <Loader />;
+        return <Loader height="25px" width="25px" color="white" />;
       case apiConstants.success:
         return renderSuccessView();
       case apiConstants.failure:
@@ -90,7 +94,7 @@ export default function Images() {
   return (
     <MainContainer>
       {renderAppropView()}
-      {renderEmptyListView()}
+      {audioList.length <= 0 && renderEmptyListView()}
     </MainContainer>
   );
 }

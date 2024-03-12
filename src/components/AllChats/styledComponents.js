@@ -97,6 +97,7 @@ export const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-shrink: 0;
 
   p {
     color: #fff;
@@ -108,7 +109,6 @@ export const TopContainer = styled.div`
 export const SearchContainer = styled.div`
   height: 40px;
   width: 100%;
-  /* border: 1px solid #203047; */
   border: ${({ isSearchFocus }) =>
     isSearchFocus ? "none" : "1px solid #203047"};
   display: flex;

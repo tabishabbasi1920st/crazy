@@ -27,33 +27,33 @@ export default function AllChat() {
   const [isSearchFocus, setIsSearchFocus] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
-  useEffect(() => {
-    const getAllChats = async () => {
-      try {
-        setApiStatus(apiConstants.inProgress);
-        const apiUrl = "http://localhost:5000/all-chats";
-        const options = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ user: profile.email }),
-        };
-        const response = await fetch(apiUrl, options);
-        const fetchedData = await response.json();
-        if (response.ok) {
-          const chatList = fetchedData.allChats;
-          setChatList(chatList);
-          setApiStatus(apiConstants.success);
-        } else {
-          setApiStatus(apiConstants.failure);
-        }
-      } catch (err) {
-        console.log("Error while fetching chatlist:", err);
+  const getAllChats = async () => {
+    try {
+      setApiStatus(apiConstants.inProgress);
+      const apiUrl = "http://localhost:5000/all-chats";
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: profile.email }),
+      };
+      const response = await fetch(apiUrl, options);
+      const fetchedData = await response.json();
+      if (response.ok) {
+        const chatList = fetchedData.allChats;
+        setChatList(chatList);
+        setApiStatus(apiConstants.success);
+      } else {
         setApiStatus(apiConstants.failure);
       }
-    };
+    } catch (err) {
+      console.log("Error while fetching chatlist:", err);
+      setApiStatus(apiConstants.failure);
+    }
+  };
 
+  useEffect(() => {
     profile !== null && getAllChats();
   }, [profile]);
 
@@ -112,7 +112,7 @@ export default function AllChat() {
       case apiConstants.inProgress:
         return <Loader height="40px" width="40px" color="white" />;
       default:
-        return <Failure />;
+        return <Failure apiFuncToReq={getAllChats} />;
     }
   };
 

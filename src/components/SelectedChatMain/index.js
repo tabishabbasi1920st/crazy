@@ -35,33 +35,33 @@ export default function SelectedChatMain() {
 
   const mainChatContainerRef = useRef(null);
 
-  useEffect(() => {
-    const gettingChats = async () => {
-      setApiStatus(apiStatusConstants.inProgress);
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/my-chats?me=${profile.email}&to=${selectedChat.email}`;
-      const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${Cookies.get("chatToken")}`,
-        },
-      };
-
-      try {
-        const response = await fetch(apiUrl, options);
-        if (response.ok) {
-          const chatData = await response.json();
-          setChatList(chatData);
-          setApiStatus(apiStatusConstants.success);
-        } else {
-          setApiStatus(apiStatusConstants.failure);
-        }
-      } catch (error) {
-        console.error("Error fetching chats:", error);
-        setApiStatus(apiStatusConstants.failure);
-      }
+  const gettingChats = async () => {
+    setApiStatus(apiStatusConstants.inProgress);
+    const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/my-chats?me=${profile.email}&to=${selectedChat.email}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${Cookies.get("chatToken")}`,
+      },
     };
 
+    try {
+      const response = await fetch(apiUrl, options);
+      if (response.ok) {
+        const chatData = await response.json();
+        setChatList(chatData);
+        setApiStatus(apiStatusConstants.success);
+      } else {
+        setApiStatus(apiStatusConstants.failure);
+      }
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      setApiStatus(apiStatusConstants.failure);
+    }
+  };
+
+  useEffect(() => {
     if (profile !== null && selectedChat !== null) {
       gettingChats();
     }
@@ -122,7 +122,7 @@ export default function SelectedChatMain() {
       case apiStatusConstants.success:
         return renderSuccessView();
       case apiStatusConstants.failure:
-        return <Failure />;
+        return <Failure apiFuncToReq={gettingChats} />;
       default:
         return null;
     }
