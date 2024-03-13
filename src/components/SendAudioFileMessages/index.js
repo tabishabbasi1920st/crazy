@@ -8,6 +8,7 @@ import {
 } from "./styledComponents";
 import { MdSend } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
 
 const messageTypeConstants = {
   text: "TEXT",
@@ -37,6 +38,14 @@ export default function SendAudioFileMessages({ onClose }) {
   const [base64Audio, setBase64Audio] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
+  const toastOptions = {
+    autoClose: 2000,
+    style: {
+      background: "#0f172a",
+      color: "#fff",
+    },
+  };
+
   const { setChatList, socket, selectedChat, profile, chatList } =
     useContext(ChatContext);
 
@@ -46,14 +55,22 @@ export default function SendAudioFileMessages({ onClose }) {
     const file = e.target.files[0];
 
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      if (file.type.startsWith("audio/")) {
+        if (file.size <= 100 * 1024 * 1024) {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
 
-      reader.onloadend = () => {
-        console.log("loading completed...");
-        setAudio(reader.result);
-        setBase64Audio(reader.result.split(",")[1]);
-      };
+          reader.onloadend = () => {
+            console.log("loading completed...");
+            setAudio(reader.result);
+            setBase64Audio(reader.result.split(",")[1]);
+          };
+        } else {
+          toast.error("File size should not exceed 100MB");
+        }
+      } else {
+        toast.error("Please select audio file only.", toastOptions);
+      }
     }
   };
 
@@ -168,6 +185,7 @@ export default function SendAudioFileMessages({ onClose }) {
           <audio src={audio} controls />
         </AudioWrapperContainer>
       )}
+      <ToastContainer />
     </MainContainer>
   );
 }
