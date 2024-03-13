@@ -109,6 +109,9 @@ export const WindowButton = styled.button`
   border: none;
   border-radius: 5px;
   transform: rotate(90deg);
+  @media screen and (max-width: 768px) {
+    transform: rotate(-90deg);
+  }
 
   color: ${({ isOpen }) => (isOpen ? "#326dec" : "#4e5d73")};
   background-color: ${({ isOpen }) => (isOpen ? "#bfdbfe" : "#203047")};

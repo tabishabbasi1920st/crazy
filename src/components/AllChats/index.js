@@ -3,6 +3,7 @@ import { ChatContext } from "../Context/ChatContext";
 import { FaSearch } from "react-icons/fa";
 import Loader from "../Loader";
 import Failure from "../Failure";
+import ChatItem from "../ChatItem";
 
 import {
   SearchContainer,
@@ -86,21 +87,9 @@ export default function AllChat() {
   const renderSuccessView = () => {
     return (
       <ul>
-        {getFilteredListBySearch().map((eachChat) => {
-          const { id, name } = eachChat;
-          const imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${eachChat.imageUrl}`;
-          return (
-            <li key={id} onClick={() => setSelectedChat(eachChat)}>
-              <BackgroundImageContainer
-                style={{ backgroundImage: `url(${imageUrl})` }}
-              />
-
-              <DescriptionContainer>
-                <p>{name}</p>
-              </DescriptionContainer>
-            </li>
-          );
-        })}
+        {getFilteredListBySearch().map((eachChat) => (
+          <ChatItem key={eachChat._id} eachChat={eachChat} />
+        ))}
       </ul>
     );
   };

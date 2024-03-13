@@ -92,6 +92,7 @@ export const MainContainer = styled.div`
   .msg {
     color: #ffffff;
     font-size: 14px;
+    word-break: break-all;
   }
 
   .msg-time {
