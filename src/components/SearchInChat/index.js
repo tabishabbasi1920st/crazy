@@ -5,17 +5,17 @@ import { useState, useContext } from "react";
 import { ChatContext } from "../Context/ChatContext";
 
 export default function SearchInChat() {
-  const [searchInput, setSearchInput] = useState("");
   const [isChatSearchFocus, setIsChatSearchFocus] = useState(false);
-  const { setSearchInChat } = useContext(ChatContext);
+  const { setSearchInChat, searchInChatTerm, setSearchInChatTerm } =
+    useContext(ChatContext);
 
   const handleSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
+    setSearchInChatTerm(e.target.value);
   };
 
   const handleCloseButtonClick = () => {
     setSearchInChat(false);
-    setSearchInput("");
+    setSearchInChatTerm("");
   };
 
   return (
@@ -27,7 +27,7 @@ export default function SearchInChat() {
         <input
           type="search"
           placeholder="Search in this chat"
-          value={searchInput}
+          value={searchInChatTerm}
           onFocus={() => setIsChatSearchFocus(true)}
           onBlur={() => setIsChatSearchFocus(false)}
           onChange={handleSearchInputChange}

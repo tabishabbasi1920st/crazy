@@ -11,6 +11,7 @@ const ChatContextProvider = ({ children }) => {
   const [onlineUsersList, setOnlineUsersList] = useState([]);
   const [senderActivity, setSenderActivity] = useState({});
   const [customizationSidebar, setCustomizationSidebar] = useState(false);
+  const [searchInChatTerm, setSearchInChatTerm] = useState("");
 
   return (
     <ChatContext.Provider
@@ -31,6 +32,8 @@ const ChatContextProvider = ({ children }) => {
         setOnlineUsersList,
         customizationSidebar,
         setCustomizationSidebar,
+        searchInChatTerm,
+        setSearchInChatTerm,
       }}
     >
       {children}

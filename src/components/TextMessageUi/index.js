@@ -22,7 +22,8 @@ export default function TextMessageUi({ eachTextMessage }) {
   const minutes = dt.getMinutes().toLocaleString();
   const formattedMinutes = minutes.length < 2 ? `0${minutes}` : minutes;
 
-  const { profile, selectedChat } = useContext(ChatContext);
+  const { profile, selectedChat, searchInChatTerm, searchInChat } =
+    useContext(ChatContext);
 
   const imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${selectedChat.imageUrl}`;
 
@@ -34,7 +35,7 @@ export default function TextMessageUi({ eachTextMessage }) {
         return <BsCheckAll color="#fff" />;
       case msgDelieveryStatusConstants.pending:
         // return <BiErrorCircle color="red" />;
-        return <Loader height="15px" width="15px" color="white"/>;
+        return <Loader height="15px" width="15px" color="white" />;
     }
   };
 
@@ -46,11 +47,22 @@ export default function TextMessageUi({ eachTextMessage }) {
     );
   };
 
+  const highlightedMsg =
+    searchInChat & (searchInChatTerm !== "") &&
+    content.includes(searchInChatTerm);
+
   return (
-    <MainContainer sentBy={sentBy} profile={profile}>
+    <MainContainer
+      sentBy={sentBy}
+      profile={profile}
+      style={highlightedMsg ? { backgroundColor: "red" } : {}}
+    >
       {/* rendering user dp with its message */}
       {sentBy === selectedChat.email && renderSenderUserDp()}
-      <div className="msg-container">
+      <div
+        className="msg-container"
+        style={highlightedMsg ? { backgroundColor: "red" } : {}}
+      >
         <p className="msg">{content}</p>
         <p className="msg-time">{`${formattedHours}:${formattedMinutes} ${amOrPm} `}</p>
       </div>
