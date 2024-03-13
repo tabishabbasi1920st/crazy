@@ -37,6 +37,7 @@ export default function SendCapturedImageMessage({ onClose }) {
   const videoRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [base64Image, setBase64Image] = useState(null);
+  const [imgSize, setImgSize] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
   const { profile, selectedChat, socket, setChatList } =
@@ -76,6 +77,14 @@ export default function SendCapturedImageMessage({ onClose }) {
     const base64Data = capturedImageSrc.split(",")[1];
     setBase64Image(base64Data);
     setImageSrc(capturedImageSrc);
+
+    // Calculate the size of the captured image in bytes
+    const binaryData = atob(base64Data);
+    const imageSizeInBytes = binaryData.length;
+
+    // conver the size to mb
+    const imageSizeInMB = imageSizeInBytes / (1024 * 1024).toFixed(2);
+    setImgSize(imageSizeInMB);
   };
 
   const handleUpload = async () => {
@@ -171,7 +180,7 @@ export default function SendCapturedImageMessage({ onClose }) {
       </CameraAndImgContainer>
       <ControllPanel>
         <CaptureBtn onClick={capture}>Capture</CaptureBtn>
-        {imageSrc !== null && (
+        {imgSize !== 0 && (
           <SendBtn onClick={handleUpload}>
             <MdSend />
           </SendBtn>
