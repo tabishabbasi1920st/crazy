@@ -85,6 +85,8 @@ export default function SendCapturedImageMessage({ onClose }) {
     // conver the size to mb
     const imageSizeInMB = imageSizeInBytes / (1024 * 1024).toFixed(2);
     setImgSize(imageSizeInMB);
+
+    console.log(imageSrc, base64Data);
   };
 
   const handleUpload = async () => {
@@ -176,11 +178,11 @@ export default function SendCapturedImageMessage({ onClose }) {
       <CameraAndImgContainer>
         <video className="video" ref={videoRef} autoPlay playsInline />
 
-        {imageSrc && <img src={imageSrc} alt="Captured" />}
+        {imgSize > 0 && <img src={imageSrc} alt="Captured" />}
       </CameraAndImgContainer>
       <ControllPanel>
         <CaptureBtn onClick={capture}>Capture</CaptureBtn>
-        {imgSize !== 0 && (
+        {imgSize > 0 && (
           <SendBtn onClick={handleUpload}>
             <MdSend />
           </SendBtn>
