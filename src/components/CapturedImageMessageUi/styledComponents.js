@@ -73,6 +73,7 @@ export const MainContainer = styled.div`
 
 export const Tag = styled.span`
   color: #fff;
+  font-style: italic;
 `;
 
 export const ImageWrapper = styled.div`

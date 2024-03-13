@@ -31,37 +31,7 @@ export const MainContainer = styled.div`
       background-color: #070b15;
     }
   }
-
-  li {
-    position: relative;
-    left: 0px;
-    padding: 10px 10px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    animation: leftToInitial 0.5s ease-in-out;
-
-    @keyframes leftToInitial {
-      0% {
-        left: -770px;
-      }
-      100% {
-        left: 0px;
-      }
-    }
-  }
-
-  li:hover {
-    background-color: #0f172a;
-  }
-
-  li p {
-    color: #cbd5e1;
-  }
 `;
-
-
 
 export const TopContainer = styled.div`
   height: 115px;

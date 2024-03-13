@@ -1,6 +1,36 @@
 import styled from "styled-components";
 
-export const MainContainer = styled.li``;
+export const MainContainer = styled.li`
+  background-color: ${({ isSelected }) => (isSelected ? "#0f172a" : "")};
+  /* border:2px solid red; */
+  position: relative;
+  left: 0px;
+  padding: 10px 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  animation: leftToInitial 0.5s ease-in-out;
+  transition: all 0.1s ease-in-out;
+
+  @keyframes leftToInitial {
+    0% {
+      left: -770px;
+    }
+    100% {
+      left: 0px;
+    }
+  }
+
+  &:hover {
+    background-color: #0f172a;
+    padding:10px 12px;
+  }
+
+  p {
+    color: #cbd5e1;
+  }
+`;
 
 export const BackgroundImageContainer = styled.div`
   height: 50px;

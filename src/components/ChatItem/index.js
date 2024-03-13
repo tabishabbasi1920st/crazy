@@ -7,12 +7,19 @@ import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 
 export default function ChatItem({ eachChat }) {
-  const { id, name } = eachChat;
+  const { _id, name } = eachChat;
+  console.log(eachChat);
   const imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${eachChat.imageUrl}`;
-  const { setSelectedChat } = useContext(ChatContext);
+  const { setSelectedChat, selectedChat } = useContext(ChatContext);
 
   return (
-    <MainContainer key={id} onClick={() => setSelectedChat(eachChat)}>
+    <MainContainer
+      isSelected={
+        selectedChat !== null && selectedChat.email === eachChat.email
+      }
+      key={_id}
+      onClick={() => setSelectedChat(eachChat)}
+    >
       <BackgroundImageContainer
         style={{ backgroundImage: `url(${imageUrl})` }}
       />
