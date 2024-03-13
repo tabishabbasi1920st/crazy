@@ -9,6 +9,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { MdSend } from "react-icons/md";
 import { ChatContext } from "../Context/ChatContext";
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
 
 const messageTypeConstants = {
   text: "TEXT",
@@ -38,6 +39,14 @@ export default function SendSimplePhoto({ onClose }) {
   const [base64Image, setBase64Image] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
+  const toastOptions = {
+    autoClose: 2000,
+    style: {
+      background: "#0f172a",
+      color: "#fff",
+    },
+  };
+
   const { profile, selectedChat, setChatList, socket } =
     useContext(ChatContext);
 
@@ -54,15 +63,19 @@ export default function SendSimplePhoto({ onClose }) {
     const file = e.target.files[0];
 
     if (file) {
-      // it is used to read files asyncronously
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      if (file.type.startsWith("image/")) {
+        // it is used to read files asyncronously
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
 
-      reader.onloadend = () => {
-        console.log(`File loaded completely`);
-        setImage(reader.result);
-        setBase64Image(reader.result.split(",")[1]);
-      };
+        reader.onloadend = () => {
+          console.log(`File loaded completely`);
+          setImage(reader.result);
+          setBase64Image(reader.result.split(",")[1]);
+        };
+      } else {
+        toast.error("Please select image file only.", toastOptions);
+      }
     }
   };
 
@@ -148,7 +161,6 @@ export default function SendSimplePhoto({ onClose }) {
       );
       setApiStatus(apiConstants.failure);
     }
-
   };
 
   return (
@@ -172,6 +184,7 @@ export default function SendSimplePhoto({ onClose }) {
           </SendImageBtn>
         )}
       </ButtonsContainer>
+      <ToastContainer />
     </MainContainer>
   );
 }

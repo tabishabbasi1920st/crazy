@@ -49,7 +49,7 @@ export default function TextMessageUi({ eachTextMessage }) {
 
   const highlightedMsg =
     searchInChat & (searchInChatTerm !== "") &&
-    content.includes(searchInChatTerm);
+    content.toLowerCase().includes(searchInChatTerm.toLowerCase());
 
   return (
     <MainContainer
