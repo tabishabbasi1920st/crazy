@@ -89,6 +89,92 @@ export default function SendCapturedImageMessage({ onClose }) {
     console.log(imageSrc, base64Data);
   };
 
+  // const handleUpload = async () => {
+  //   if (!imageSrc) {
+  //     console.log("Not captured image");
+  //     return;
+  //   }
+
+  //   const newMessage = {
+  //     id: uuidv4(),
+  //     type: messageTypeConstants.capturedImage,
+  //     content: imageSrc,
+  //     sentBy: profile.email,
+  //     sentTo: selectedChat.email,
+  //     timestamp: Date.now(),
+  //     delieveryStatus: msgDelieveryStatusConstants.pending,
+  //   };
+
+  //   setChatList((prevList) => {
+  //     const newList = [...prevList, newMessage];
+  //     return newList;
+  //   });
+
+  //   onClose();
+
+  //   try {
+  //     setApiStatus(apiConstants.inProgress);
+  //     const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/captured-image`;
+  //     const options = {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ capturedImage: base64Image }),
+  //     };
+
+  //     const response = await fetch(apiUrl, options);
+  //     if (response.ok) {
+  //       const fetchedData = await response.json();
+  //       const { savedCapturedImageUrl } = fetchedData;
+  //       console.log("savedCapturedImageUrl", savedCapturedImageUrl);
+  //       setApiStatus(apiConstants.success);
+
+  //       // // Emit the privateAudio event to the server.
+  //       socket.emit(
+  //         "CapturedImageMessage",
+  //         { ...newMessage, content: savedCapturedImageUrl },
+  //         (ack) => {
+  //           console.log("send record msg ack: ", ack);
+  //           const { success, message, actualMsg } = ack;
+  //           if (success) {
+  //             // Update the chatData with the sent audio message.
+  //             console.log(success, message, actualMsg);
+  //             setChatList((prevList) =>
+  //               prevList.map((eachMsg) => {
+  //                 if (eachMsg.id === actualMsg.id) {
+  //                   return { ...eachMsg, ...actualMsg };
+  //                 } else {
+  //                   return eachMsg;
+  //                 }
+  //               })
+  //             );
+  //           } else {
+  //             console.error(
+  //               "Error while getting audio acknowledgment",
+  //               success,
+  //               message
+  //             );
+  //           }
+  //         }
+  //       );
+  //     } else {
+  //       console.log(
+  //         "Response is not Ok while sending audio file to backend by api"
+  //       );
+  //       setApiStatus(apiConstants.failure);
+  //     }
+  //   } catch (err) {
+  //     console.error(
+  //       "Error while sending audio file to backend to make its url: ",
+  //       err
+  //     );
+  //     setApiStatus(apiConstants.failure);
+  //   }
+  // };
+
+  // handle upload on cloudinary...
+
   const handleUpload = async () => {
     if (!imageSrc) {
       console.log("Not captured image");
@@ -113,27 +199,31 @@ export default function SendCapturedImageMessage({ onClose }) {
     onClose();
 
     try {
+      const data = new FormData();
+      data.append("file", imageSrc);
+      data.append("upload_preset", "captured_image_preset");
+
       setApiStatus(apiConstants.inProgress);
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/captured-image`;
+      const cloudName = "dctfbwk0m";
+      const resourceType = "image";
+      const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
       const options = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ capturedImage: base64Image }),
+        body: data,
       };
 
       const response = await fetch(apiUrl, options);
+
       if (response.ok) {
         const fetchedData = await response.json();
-        const { savedCapturedImageUrl } = fetchedData;
-        console.log("savedCapturedImageUrl", savedCapturedImageUrl);
+        const { secure_url } = fetchedData;
+        console.log("savedCapturedImageUrl", secure_url);
         setApiStatus(apiConstants.success);
 
         // // Emit the privateAudio event to the server.
         socket.emit(
           "CapturedImageMessage",
-          { ...newMessage, content: savedCapturedImageUrl },
+          { ...newMessage, content: secure_url },
           (ack) => {
             console.log("send record msg ack: ", ack);
             const { success, message, actualMsg } = ack;

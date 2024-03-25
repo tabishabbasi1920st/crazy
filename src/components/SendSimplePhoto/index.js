@@ -108,7 +108,7 @@ export default function SendSimplePhoto({ onClose }) {
 
       const data = new FormData();
       data.append("file", image);
-      data.append("upload_preset", "image_preset");
+      data.append("upload_preset", "simple_image_preset");
 
       const cloudName = "dctfbwk0m";
       const resourceType = "image";

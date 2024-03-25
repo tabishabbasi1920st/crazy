@@ -8,7 +8,6 @@ import {
 import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
-import { BiErrorCircle } from "react-icons/bi";
 import Loader from "../Loader";
 
 const msgDelieveryStatusConstants = {
@@ -17,26 +16,9 @@ const msgDelieveryStatusConstants = {
   seen: "SEEN",
 };
 
-const apiConstants = {
-  initial: "INITIAL",
-  inProgress: "IN_PROGRESS",
-  success: "SUCCESS",
-  failure: "FAILURE",
-};
-
-const messageTypeConstants = {
-  text: "TEXT",
-  audio: "AUDIO",
-  capturedAudio: "CAPTURED_AUDIO",
-  video: "VIDEO",
-  capturedVideo: "CAPTURED_VIDEO",
-  image: "IMAGE",
-  capturedImage: "CAPTURED_IMAGE",
-};
-
 export default function RecordedAudioMessageUi({ eachCapturedImageMessage }) {
   const { content, timestamp, sentBy, delieveryStatus } =
-  eachCapturedImageMessage;
+    eachCapturedImageMessage;
 
   const dt = new Date(timestamp);
   const hour = dt.getHours();
@@ -47,12 +29,7 @@ export default function RecordedAudioMessageUi({ eachCapturedImageMessage }) {
 
   const { profile } = useContext(ChatContext);
 
-  let imageUrl = null;
-  if (content.startsWith("data")) {
-    imageUrl = content;
-  } else {
-    imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
-  }
+  const imageUrl = content;
 
   const renderAppropritateIcon = () => {
     switch (delieveryStatus) {

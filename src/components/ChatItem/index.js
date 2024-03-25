@@ -8,7 +8,6 @@ import { useContext } from "react";
 
 export default function ChatItem({ eachChat }) {
   const { _id, name } = eachChat;
-  console.log(eachChat);
   const imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${eachChat.imageUrl}`;
   const { setSelectedChat, selectedChat } = useContext(ChatContext);
 
