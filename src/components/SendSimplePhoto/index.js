@@ -79,7 +79,8 @@ export default function SendSimplePhoto({ onClose }) {
     }
   };
 
-  const handleSend = async () => {
+  // handle send on cloudinary...
+  const handleSendOnCloudinary = async () => {
     if (!image) {
       console.log("Not image");
       return;
@@ -104,26 +105,32 @@ export default function SendSimplePhoto({ onClose }) {
 
     try {
       setApiStatus(apiConstants.inProgress);
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/simple-image`;
+
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "image_preset");
+
+      const cloudName = "dctfbwk0m";
+      const resourceType = "image";
+      const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
       const options = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ image: base64Image }),
+        body: data,
       };
 
       const response = await fetch(apiUrl, options);
+
       if (response.ok) {
         const fetchedData = await response.json();
-        const { savedImageUrl } = fetchedData;
-        console.log("savedImageUrl", savedImageUrl);
+        const { secure_url } = fetchedData;
+        console.log("savedImageUrl", secure_url);
         setApiStatus(apiConstants.success);
 
         // // Emit the privateAudio event to the server.
         socket.emit(
           "SimpleImageMessage",
-          { ...newMessage, content: savedImageUrl },
+          { ...newMessage, content: secure_url },
           (ack) => {
             console.log("send record msg ack: ", ack);
             const { success, message, actualMsg } = ack;
@@ -141,7 +148,7 @@ export default function SendSimplePhoto({ onClose }) {
               );
             } else {
               console.error(
-                "Error while getting audio acknowledgment",
+                "Error while getting simple photo acknowledgment",
                 success,
                 message
               );
@@ -156,7 +163,7 @@ export default function SendSimplePhoto({ onClose }) {
       }
     } catch (err) {
       console.error(
-        "Error while sending audio file to backend to make its url: ",
+        "Error while sending simple photo file to backend to make its url: ",
         err
       );
       setApiStatus(apiConstants.failure);
@@ -179,7 +186,7 @@ export default function SendSimplePhoto({ onClose }) {
         </ChooseImageBtn>
 
         {base64Image !== null && (
-          <SendImageBtn onClick={handleSend}>
+          <SendImageBtn onClick={handleSendOnCloudinary}>
             <MdSend />
           </SendImageBtn>
         )}

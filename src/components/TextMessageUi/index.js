@@ -1,4 +1,4 @@
-import { MainContainer, SenderProfileContainer } from "./styledComponents";
+import { MainContainer } from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
@@ -39,14 +39,6 @@ export default function TextMessageUi({ eachTextMessage }) {
     }
   };
 
-  const renderSenderUserDp = () => {
-    return (
-      <SenderProfileContainer
-        backgroundimage={imageUrl}
-      ></SenderProfileContainer>
-    );
-  };
-
   const highlightedMsg =
     searchInChat & (searchInChatTerm !== "") &&
     content.toLowerCase().includes(searchInChatTerm.toLowerCase());
@@ -57,8 +49,6 @@ export default function TextMessageUi({ eachTextMessage }) {
       profile={profile}
       style={highlightedMsg ? { backgroundColor: "red" } : {}}
     >
-      {/* rendering user dp with its message */}
-      {sentBy === selectedChat.email && renderSenderUserDp()}
       <div
         className="msg-container"
         style={highlightedMsg ? { backgroundColor: "red" } : {}}

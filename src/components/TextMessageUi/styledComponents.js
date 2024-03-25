@@ -102,15 +102,4 @@ export const MainContainer = styled.div`
   }
 `;
 
-export const SenderProfileContainer = styled.div`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  align-self: flex-end;
-  flex-shrink: 0;
-  margin-right: 5px;
-  background-image: url(${({ backgroundimage }) => backgroundimage});
-  background-size: cover;
-  background-position: center;
-`;
+

@@ -47,12 +47,7 @@ export default function RecordedAudioMessageUi({ eachSimpleImageMessage }) {
 
   const { profile } = useContext(ChatContext);
 
-  let imageUrl = null;
-  if (content.startsWith("data")) {
-    imageUrl = content;
-  } else {
-    imageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
-  }
+  const imageUrl = content;
 
   const renderAppropritateIcon = () => {
     switch (delieveryStatus) {
