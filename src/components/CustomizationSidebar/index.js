@@ -40,7 +40,7 @@ const tileIdConstants = {
 export default function CustomizationSidebar({ isOpenInSmall }) {
   const { selectedChat, senderActivity, onlineUsersList } =
     useContext(ChatContext);
-  const imageUrl = `https://crazychat.onrender.com/${selectedChat.imageUrl}`;
+  const imageUrl = selectedChat.imageUrl;
   const [selectedTileId, setSelectedTileId] = useState(tileOptions[0].id);
 
   const isActive = onlineUsersList.includes(selectedChat.email);
