@@ -144,6 +144,10 @@ export const MainContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    &:disabled {
+      background-color: #779edc;
+      cursor:not-allowed ;
+    }
   }
 
   form button:hover {

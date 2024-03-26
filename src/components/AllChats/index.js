@@ -31,7 +31,7 @@ export default function AllChat() {
   const getAllChats = async () => {
     try {
       setApiStatus(apiConstants.inProgress);
-      const apiUrl = "https://crazy.up.railway.app/all-chats";
+      const apiUrl = "https://crazychat.onrender.com/all-chats";
       const options = {
         method: "POST",
         headers: {

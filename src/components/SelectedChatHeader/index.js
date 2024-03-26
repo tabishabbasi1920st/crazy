@@ -28,7 +28,6 @@ export default function SelectedChatHeader() {
   } = useContext(ChatContext);
 
   const { imageUrl, name } = selectedChat;
-  const formattedImageUrl = `http://localhost:${process.env.REACT_APP_PORT}/${imageUrl}`;
 
   const handleExitButtonClick = () => {
     setSelectedChat(null);
@@ -60,7 +59,7 @@ export default function SelectedChatHeader() {
         <FaArrowCircleLeft />
       </ExitButton>
       <UserInfoContainer>
-        <Dp backgroundimage={formattedImageUrl}></Dp>
+        <Dp backgroundimage={imageUrl}></Dp>
         <InfoContainer>
           <p className="name">{name}</p>
           <p className="active-status">{isActive ? "Online" : "Offline"}</p>

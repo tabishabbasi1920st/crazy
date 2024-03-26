@@ -24,7 +24,7 @@ export default function Profile() {
     const getUserProfile = async () => {
       try {
         setApiStatus(apiConstants.inProgress);
-        const apiurl = "http://localhost:5000/user-info";
+        const apiurl = "https://crazychat.onrender.com/user-info";
         const options = {
           method: "GET",
           headers: {
@@ -37,12 +37,13 @@ export default function Profile() {
         if (response.ok) {
           const fetchedData = await response.json();
           const profile = fetchedData.message[0];
+          console.log("Header profile", profile);
           const updatedProfile = {
             id: profile._id,
             name: profile.name,
             email: profile.email,
             password: profile.password,
-            imageUrl: `http://localhost:${process.env.REACT_APP_PORT}/${profile.imageUrl}`,
+            imageUrl: profile.imageUrl,
           };
 
           setProfile(updatedProfile);
