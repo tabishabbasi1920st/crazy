@@ -17,23 +17,6 @@ const msgDelieveryStatusConstants = {
   seen: "SEEN",
 };
 
-const apiConstants = {
-  initial: "INITIAL",
-  inProgress: "IN_PROGRESS",
-  success: "SUCCESS",
-  failure: "FAILURE",
-};
-
-const messageTypeConstants = {
-  text: "TEXT",
-  audio: "AUDIO",
-  capturedAudio: "CAPTURED_AUDIO",
-  video: "VIDEO",
-  capturedVideo: "CAPTURED_VIDEO",
-  image: "IMAGE",
-  capturedImage: "CAPTURED_IMAGE",
-};
-
 export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
   const { content, timestamp, sentBy, delieveryStatus } =
     eachRecordedAudioMessage;
@@ -47,13 +30,7 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
 
   const { profile } = useContext(ChatContext);
 
-
-  let audioUrl = null;
-  if (content.startsWith("blob")) {
-    audioUrl = content;
-  } else {
-    audioUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
-  }
+  const audioUrl = content;
 
   const renderAppropritateIcon = () => {
     switch (delieveryStatus) {

@@ -153,6 +153,89 @@ export default function SendRecordedAudioMessage({ onClose }) {
     };
   };
 
+  // const handleAudioSent = async () => {
+  //   try {
+  //     if (recordedChunks.length === 0) {
+  //       console.error("No recorded data available");
+  //       return;
+  //     }
+
+  //     const newMessage = {
+  //       id: uuidv4(),
+  //       type: messageTypeConstants.capturedAudio,
+  //       content: audioURL,
+  //       sentBy: profile.email,
+  //       sentTo: selectedChat.email,
+  //       timestamp: Date.now(),
+  //       delieveryStatus: msgDelieveryStatusConstants.pending,
+  //     };
+
+  //     setChatList((prevList) => [...prevList, newMessage]);
+
+  //     try {
+  //       // Send the audio message to the server
+  //       setApiStatus(apiConstants.inProgress);
+  //       const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/recorded-audio-message`;
+  //       const options = {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ recordedAudio: base64Audio }),
+  //       };
+
+  //       const response = await fetch(apiUrl, options);
+  //       if (response.ok) {
+  //         const fetchedData = await response.json();
+  //         const { savedAudioUrl } = fetchedData;
+  //         console.log("savedAudioUrl", savedAudioUrl);
+  //         setApiStatus(apiConstants.success);
+
+  //         // Emit the privateAudio event to the server
+  //         socket.emit(
+  //           "RecordedAudioMessage",
+  //           { ...newMessage, content: savedAudioUrl },
+  //           (ack) => {
+  //             console.log("send record msg ack: ", ack);
+  //             const { success, message, actualMsg } = ack;
+  //             if (success) {
+  //               // Update the chatData with the sent audio message.
+  //               console.log(success, message, actualMsg);
+  //               setChatList((prevList) =>
+  //                 prevList.map((eachMsg) => {
+  //                   if (eachMsg.id === actualMsg.id) {
+  //                     return { ...eachMsg, ...actualMsg };
+  //                   } else {
+  //                     return eachMsg;
+  //                   }
+  //                 })
+  //               );
+  //             } else {
+  //               console.error(
+  //                 "Error while getting audio acknowledgment",
+  //                 success,
+  //                 message
+  //               );
+  //             }
+  //           }
+  //         );
+
+  //         setApiStatus(apiConstants.success);
+  //       } else {
+  //       }
+  //     } catch (err) {
+  //       setApiStatus(apiConstants.failure);
+  //     }
+
+  //     // Reset the audio recording state
+  //     setRecordedChunks([]);
+  //     setAudioURL("");
+  //     onClose();
+  //   } catch (error) {
+  //     console.error("Error sending audio:", error);
+  //   }
+  // };
+
   const handleAudioSent = async () => {
     try {
       if (recordedChunks.length === 0) {
@@ -173,28 +256,35 @@ export default function SendRecordedAudioMessage({ onClose }) {
       setChatList((prevList) => [...prevList, newMessage]);
 
       try {
-        // Send the audio message to the server
         setApiStatus(apiConstants.inProgress);
-        const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/recorded-audio-message`;
+        // Send the audio message to the server
+
+        const combinedBlob = new Blob(recordedChunks, { type: "video/webm" });
+
+        const data = new FormData();
+        data.append("file", combinedBlob);
+        data.append("upload_preset", "captured_audio_preset");
+
+        const cloudName = "dctfbwk0m";
+        const resourceType = "video";
+        const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
         const options = {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ recordedAudio: base64Audio }),
+          body: data,
         };
 
         const response = await fetch(apiUrl, options);
         if (response.ok) {
           const fetchedData = await response.json();
-          const { savedAudioUrl } = fetchedData;
-          console.log("savedAudioUrl", savedAudioUrl);
+          const { secure_url } = fetchedData;
+          console.log("savedAudioUrl", secure_url);
           setApiStatus(apiConstants.success);
 
           // Emit the privateAudio event to the server
           socket.emit(
             "RecordedAudioMessage",
-            { ...newMessage, content: savedAudioUrl },
+            { ...newMessage, content: secure_url },
             (ack) => {
               console.log("send record msg ack: ", ack);
               const { success, message, actualMsg } = ack;

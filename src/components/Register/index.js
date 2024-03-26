@@ -25,8 +25,9 @@ export default function Register() {
     privacyChecked: false,
   });
   const [image, setImage] = useState(null);
-
+  const [cloudImageUrl, setCloudImageUrl] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
+  const [picApiStatus, setPicApiStatus] = useState(apiConstants.initial);
 
   const toastOptions = {
     autoClose: 2000,
@@ -123,21 +124,55 @@ export default function Register() {
     );
   };
 
+  const uploadingUserDpToCloudinary = async () => {
+    try {
+      setPicApiStatus(apiConstants.inProgress);
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "registered_users_images_preset");
+
+      const cloudName = "dctfbwk0m";
+      const resourceType = "image";
+      const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+      const options = {
+        method: "POST",
+        body: data,
+      };
+
+      const response = await fetch(apiUrl, options);
+      console.log(response);
+      if (response.ok) {
+        const fetchedData = await response.json();
+        console.log("Cloudinary response: ", response, fetchedData);
+        setCloudImageUrl(fetchedData.secure_url);
+        setPicApiStatus(apiConstants.success);
+      } else {
+        console.error("Error while sending registered user pic in else.");
+        setPicApiStatus(apiConstants.failure);
+      }
+    } catch (error) {
+      console.error(
+        "Error while sending registered user pic to cloudinary: ",
+        error
+      );
+      setPicApiStatus(apiConstants.failure);
+    }
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (formValidation()) {
       try {
         setApiStatus(apiConstants.inProgress);
-        const apiUrl = "http://localhost:5000/register";
-
-        const img = image.split(",")[1];
+        const apiUrl = "https://crazy.up.railway.app/register";
 
         const options = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formData, img }),
+          body: JSON.stringify({ ...formData }),
         };
 
         const response = await fetch(apiUrl, options);
@@ -167,8 +202,9 @@ export default function Register() {
     }
   };
 
-  const handleProfilePicChange = (e) => {
+  const handleProfilePicChange = async (e) => {
     const file = e.target.files[0];
+    await uploadingUserDpToCloudinary();
 
     if (!file) {
       setImage(null);
@@ -212,6 +248,9 @@ export default function Register() {
               onClick={() => profileInput.current.click()}
             >
               {image === null && "+"}
+              {image !== null &&
+                picApiStatus === apiConstants.inProgress &&
+                renderLoader()}
             </button>
 
             <input
@@ -222,6 +261,7 @@ export default function Register() {
               onChange={handleProfilePicChange}
             />
           </div>
+
           <div id="firstGroup">
             <div>
               <label htmlFor="name">Your Name</label>

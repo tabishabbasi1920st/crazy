@@ -31,7 +31,7 @@ export default function AllChat() {
   const getAllChats = async () => {
     try {
       setApiStatus(apiConstants.inProgress);
-      const apiUrl = "http://localhost:5000/all-chats";
+      const apiUrl = "https://crazy.up.railway.app/all-chats";
       const options = {
         method: "POST",
         headers: {
@@ -44,6 +44,7 @@ export default function AllChat() {
       if (response.ok) {
         const chatList = fetchedData.allChats;
         setChatList(chatList);
+        console.log(chatList)
         setApiStatus(apiConstants.success);
       } else {
         setApiStatus(apiConstants.failure);
