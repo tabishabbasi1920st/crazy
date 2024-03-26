@@ -49,14 +49,7 @@ export default function RecordedAudioMessageUi({ eachRecordedAudioMessage }) {
 
   console.log(">>>>>>>>>>>>>>>>>>", content, delieveryStatus);
 
-  let audioUrl = null;
-  if (content.startsWith("data")) {
-    audioUrl = content;
-  } else {
-    audioUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
-  }
-
-  console.log("simple.........", audioUrl);
+  const audioUrl = content;
 
   const renderAppropritateIcon = () => {
     switch (delieveryStatus) {

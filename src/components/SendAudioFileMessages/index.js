@@ -74,6 +74,7 @@ export default function SendAudioFileMessages({ onClose }) {
     }
   };
 
+  // uploading audio to cloudinary..
   const uploadAudio = async () => {
     if (!audio) {
       console.log("Not audio");
@@ -99,26 +100,30 @@ export default function SendAudioFileMessages({ onClose }) {
 
     try {
       setApiStatus(apiConstants.inProgress);
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/audio`;
+      const data = new FormData();
+      data.append("file", audio);
+      data.append("upload_preset", "simple_audio_preset");
+
+      const cloudName = "dctfbwk0m";
+      const resourceType = "video";
+      const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
       const options = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ audio: base64Audio }),
+        body: data,
       };
 
       const response = await fetch(apiUrl, options);
       if (response.ok) {
         const fetchedData = await response.json();
-        const { savedAudioUrl } = fetchedData;
-        console.log("savedAudioUrl", savedAudioUrl);
+        const { secure_url } = fetchedData;
+        console.log("savedAudioUrl", secure_url);
         setApiStatus(apiConstants.success);
 
-        // // Emit the privateAudio event to the server.
+        //  Emit the privateAudio event to the server.
         socket.emit(
           "AudioFileMessage",
-          { ...newMessage, content: savedAudioUrl },
+          { ...newMessage, content: secure_url },
           (ack) => {
             console.log("send record msg ack: ", ack);
             const { success, message, actualMsg } = ack;
@@ -156,8 +161,6 @@ export default function SendAudioFileMessages({ onClose }) {
       );
       setApiStatus(apiConstants.failure);
     }
-
-    console.log(chatList);
   };
 
   return (
