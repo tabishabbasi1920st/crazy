@@ -37,7 +37,6 @@ const apiConstants = {
 
 export default function SendSimpleVideoMessage({ onClose }) {
   const [video, setVideo] = useState(null);
-  const [base64Video, setBase64Video] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiConstants.initial);
 
   const toastOptions = {
@@ -65,7 +64,6 @@ export default function SendSimpleVideoMessage({ onClose }) {
           reader.onloadend = () => {
             console.log("loading completed ");
             setVideo(reader.result);
-            setBase64Video(reader.result.split(",")[1]);
           };
         } else {
           toast.error("File size should not exceed 100MB", toastOptions);
@@ -76,8 +74,10 @@ export default function SendSimpleVideoMessage({ onClose }) {
     }
   };
 
+  // uploading video to cloudinary..
+
   const uploadVideo = async () => {
-    if (!base64Video) {
+    if (!video) {
       console.error("No base64 video in simple video sender");
       return;
     }
@@ -97,26 +97,31 @@ export default function SendSimpleVideoMessage({ onClose }) {
 
     try {
       // Send the audio message to the server.
-      const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/simple-video-message`;
+
+      const data = new FormData();
+      data.append("file", video);
+      data.append("upload_preset", "captured_video_preset");
+
+      const cloudName = "dctfbwk0m";
+      const resourceType = "video";
+      const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
       const options = {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ video: base64Video }),
+        body: data,
       };
 
       const response = await fetch(apiUrl, options);
       if (response.ok) {
         const fetchedData = await response.json();
-        const { savedVideoUrl } = fetchedData;
-        console.log("savedVideoUrl", savedVideoUrl);
+        const { secure_url } = fetchedData;
+        console.log("savedVideoUrl", secure_url);
         setApiStatus(apiConstants.success);
 
         // Emit the  RecordedVideoMessage event to the server.
         socket.emit(
           "SimpleVideoMessage",
-          { ...newMessage, content: savedVideoUrl },
+          { ...newMessage, content: secure_url },
           (ack) => {
             console.log("send record msg ack: ", ack);
             const { success, message, actualMsg } = ack;
@@ -165,7 +170,7 @@ export default function SendSimpleVideoMessage({ onClose }) {
         <SelectBtn onClick={() => videoInputRef.current.click()}>
           Select
         </SelectBtn>
-        {base64Video !== null && (
+        {video !== null && (
           <SendBtn onClick={uploadVideo}>
             <MdSend />
           </SendBtn>

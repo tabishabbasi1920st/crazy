@@ -47,12 +47,7 @@ export default function SimpleVideoMessageUi({ eachSimpleVideoMessage }) {
 
   const { profile } = useContext(ChatContext);
 
-  let videoUrl = null;
-  if (content.startsWith("data")) {
-    videoUrl = content;
-  } else {
-    videoUrl = `http://localhost:${process.env.REACT_APP_PORT}/${content}`;
-  }
+  const videoUrl = content;
 
   const renderAppropritateIcon = () => {
     switch (delieveryStatus) {
