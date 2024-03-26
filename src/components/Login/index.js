@@ -78,7 +78,7 @@ export default function Register() {
     if (formValidation()) {
       setApiStatus(apiConstants.inProgress);
       try {
-        const apiUrl = "http://localhost:5000/login";
+        const apiUrl = "https://crazychat.onrender.com/login";
         const options = {
           method: "POST",
           headers: {
