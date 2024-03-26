@@ -37,7 +37,7 @@ export default function SelectedChatMain() {
 
   const gettingChats = async () => {
     setApiStatus(apiStatusConstants.inProgress);
-    const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/my-chats?me=${profile.email}&to=${selectedChat.email}`;
+    const apiUrl = `https://crazychat.onrender.com/my-chats?me=${profile.email}&to=${selectedChat.email}`;
     const options = {
       method: "GET",
       headers: {
