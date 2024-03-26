@@ -8,10 +8,10 @@ export const MainContainer = styled.div`
   padding: 5px 10px 5px 10px;
   gap: 10px;
   height: 51px;
-  flex-shrink: 0;
   position: relative;
   bottom: 0px;
   animation: topToInitial 0.2s ease-in-out;
+  border: 2px solid red;
 
   @keyframes topToInitial {
     0% {
