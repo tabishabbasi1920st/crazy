@@ -36,7 +36,7 @@ export default function Home() {
   } = useContext(ChatContext);
 
   useEffect(() => {
-    const socket = io("https://crazychat.onrender.com/10000");
+    const socket = io("https://crazychat.onrender.com");
     setSocket(socket);
 
     socket.on("connection", (msg) => {
