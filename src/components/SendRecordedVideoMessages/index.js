@@ -135,6 +135,81 @@ export default function CameraRecording({ onClose }) {
     });
   };
 
+  // const uploadVideo = async () => {
+  //   if (recordedChunks.length === 0) {
+  //     console.error("No recorded data available");
+  //     return;
+  //   }
+  //   try {
+  //     const newMessage = {
+  //       id: uuidv4(),
+  //       type: messageTypeConstants.capturedVideo,
+  //       content: videoUrl,
+  //       sentBy: profile.email,
+  //       sentTo: selectedChat.email,
+  //       timestamp: Date.now(),
+  //       delieveryStatus: msgDelieveryStatusConstants.pending,
+  //     };
+
+  //     setChatList((prevList) => [...prevList, newMessage]);
+
+  //     try {
+  //       // Send the audio message to the server.
+  //       const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/recorded-video-message`;
+  //       const options = {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ recordedVideo: base64Video }),
+  //       };
+
+  //       const response = await fetch(apiUrl, options);
+  //       if (response.ok) {
+  //         const fetchedData = await response.json();
+  //         const { savedVideoUrl } = fetchedData;
+  //         console.log("savedVideoUrl", savedVideoUrl);
+  //         setApiStatus(apiConstants.success);
+
+  //         // Emit the  RecordedVideoMessage event to the server.
+  //         socket.emit(
+  //           "RecordedVideoMessage",
+  //           { ...newMessage, content: savedVideoUrl },
+  //           (ack) => {
+  //             console.log("send record msg ack: ", ack);
+  //             const { success, message, actualMsg } = ack;
+  //             if (success) {
+  //               // Update the chatData with the sent recordedVideoMessage message.
+  //               console.log(success, message, actualMsg);
+  //               setChatList((prevList) =>
+  //                 prevList.map((eachMsg) => {
+  //                   if (eachMsg.id === actualMsg.id) {
+  //                     return { ...eachMsg, ...actualMsg };
+  //                   } else {
+  //                     return eachMsg;
+  //                   }
+  //                 })
+  //               );
+  //             } else {
+  //               console.error(
+  //                 "Error while getting audio acknowledgment",
+  //                 success,
+  //                 message
+  //               );
+  //             }
+  //           }
+  //         );
+  //       } else {
+  //         setApiStatus(apiConstants.failure);
+  //       }
+  //     } catch (err) {
+  //       setApiStatus(apiConstants.failure);
+  //     }
+  //   } catch (err) {
+  //     console.error("Error sending recorded video:", err);
+  //   }
+  // };
+
   const uploadVideo = async () => {
     if (recordedChunks.length === 0) {
       console.error("No recorded data available");
@@ -154,27 +229,33 @@ export default function CameraRecording({ onClose }) {
       setChatList((prevList) => [...prevList, newMessage]);
 
       try {
+        const combinedBlob = new Blob(recordedChunks, { type: "video/webm" });
+
         // Send the audio message to the server.
-        const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/upload/recorded-video-message`;
+        const data = new FormData();
+        data.append("file", combinedBlob);
+        data.append("upload_preset", "captured_video_preset");
+
+        const cloudName = "dctfbwk0m";
+        const resourceType = "video";
+        const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
         const options = {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ recordedVideo: base64Video }),
+          body: data,
         };
 
         const response = await fetch(apiUrl, options);
         if (response.ok) {
           const fetchedData = await response.json();
-          const { savedVideoUrl } = fetchedData;
-          console.log("savedVideoUrl", savedVideoUrl);
+          const { secure_url } = fetchedData;
+          console.log("savedVideoUrl", secure_url);
           setApiStatus(apiConstants.success);
 
           // Emit the  RecordedVideoMessage event to the server.
           socket.emit(
             "RecordedVideoMessage",
-            { ...newMessage, content: savedVideoUrl },
+            { ...newMessage, content: secure_url },
             (ack) => {
               console.log("send record msg ack: ", ack);
               const { success, message, actualMsg } = ack;
