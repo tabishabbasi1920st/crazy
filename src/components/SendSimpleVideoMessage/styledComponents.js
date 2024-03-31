@@ -11,8 +11,9 @@ export const VideoWrapper = styled.div`
 `;
 
 export const Video = styled.video`
-  border: 2px solid white;
+  border-radius: 5px;
   width: 100%;
+  height: 250px;
 `;
 
 export const ButtonsContainer = styled.div`

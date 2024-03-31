@@ -7,11 +7,11 @@ export const MainContainer = styled.div`
   align-items: center;
   padding: 5px 10px 5px 10px;
   gap: 10px;
-  height: 70px;
+  min-height: 55px;
+  max-height: 65px;
   position: relative;
   bottom: 0px;
   animation: topToInitial 0.2s ease-in-out;
-  /* border: 2px solid red; */
   justify-content: center;
 
   @keyframes topToInitial {
@@ -27,7 +27,7 @@ export const MainContainer = styled.div`
   }
 
   button {
-    height: 100%;
+    height: 40px;
     min-width: 40px;
     max-width: 40px;
     flex-shrink: 0;
