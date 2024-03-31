@@ -5,7 +5,7 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #132036;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 `;
 
 export const Header = styled.div`
