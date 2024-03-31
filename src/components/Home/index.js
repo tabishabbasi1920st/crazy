@@ -40,6 +40,11 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // extra safety while navigating to escape and then returning back if history object not cleared so it will open escape page.
+    if (localStorage.getItem("isReplace") === "") {
+      navigate("/escape", { replace: true });
+    }
+
     document.title = "Connect Me - Home";
     const socket = io("https://crazychat.onrender.com");
     setSocket(socket);

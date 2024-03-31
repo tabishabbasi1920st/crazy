@@ -112,6 +112,7 @@ export default function SendTextMessages() {
 
   if (pressing) {
     navigate("/escape", { replace: true });
+    localStorage.setItem("isReplace", "");
     window.location.replace("https://www.youtube.com");
   }
 

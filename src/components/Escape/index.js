@@ -1,6 +1,16 @@
 import { MainContainer } from "./styledComponents";
+import { useEffect } from "react";
 
-const index = () => {
+const Escape = () => {
+  // This is for extra safety if history object not clear by chance
+  useEffect(() => {
+    localStorage.removeItem("isReplace");
+
+    return () => {
+      localStorage.removeItem("isReplace");
+    };
+  }, []);
+
   return (
     <MainContainer>
       <article>
@@ -58,4 +68,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Escape;
