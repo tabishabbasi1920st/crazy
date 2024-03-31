@@ -40,6 +40,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Connect Me - Home";
     const socket = io("https://crazychat.onrender.com");
     setSocket(socket);
 

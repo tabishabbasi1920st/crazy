@@ -30,6 +30,8 @@ export default function Register() {
   const [picApiStatus, setPicApiStatus] = useState(apiConstants.initial);
 
   useEffect(() => {
+    document.title = "Connect Me - Register";
+
     if (Cookies.get("chatToken") !== undefined) {
       navigate("/");
     }

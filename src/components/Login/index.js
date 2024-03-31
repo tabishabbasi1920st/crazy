@@ -17,6 +17,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "Connect Me - Login";
     if (Cookies.get("chatToken") !== undefined) {
       navigate("/");
     }
