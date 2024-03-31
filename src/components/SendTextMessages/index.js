@@ -1,9 +1,10 @@
 import { MainContainer } from "./styledComponents";
 import { IoSend } from "react-icons/io5";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChatContext } from "../Context/ChatContext";
 import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const messageTypeConstants = {
   text: "TEXT",
@@ -26,8 +27,31 @@ export default function SendTextMessages() {
   const { profile, selectedChat, socket, setChatList } =
     useContext(ChatContext);
 
+  const navigate = useNavigate();
+
+  const [pressing, setPressing] = useState(false);
+  const timerId = useRef(null);
+
   const handleMsgInputChange = (e) => {
     setMsgInput(e.target.value);
+  };
+
+  const handleTouchStart = () => {
+    timerId.current = setTimeout(() => {
+      setPressing(true);
+      // Trigger your event or perform actions here
+      console.log("Long press event triggered");
+    }, 1500); // Adjust the duration (in milliseconds) for a long press
+  };
+
+  const handleTouchMove = () => {
+    clearTimeout(timerId.current);
+    setPressing(false);
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(timerId.current);
+    setPressing(false);
   };
 
   const handleTypingSocketEvent = (e) => {
@@ -86,6 +110,10 @@ export default function SendTextMessages() {
     console.log("message sent successfully");
   };
 
+  if (pressing) {
+    navigate("/escape", { replace: true });
+  }
+
   return (
     <MainContainer>
       <input
@@ -101,7 +129,13 @@ export default function SendTextMessages() {
           handleTypingSocketEvent(e);
         }}
       />
-      <button disabled={msgInput === ""} onClick={handleMessageSend}>
+      <button
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        disabled={msgInput === ""}
+        onClick={handleMessageSend}
+      >
         <IoSend />
       </button>
     </MainContainer>
