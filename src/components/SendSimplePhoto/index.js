@@ -3,6 +3,7 @@ import {
   ChooseImageBtn,
   SendImageBtn,
   ButtonsContainer,
+  CloseButton,
   ImageContainer,
 } from "./styledComponents";
 import { useState, useRef, useEffect, useContext } from "react";

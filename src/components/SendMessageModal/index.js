@@ -12,7 +12,7 @@ export default function SendMessageModal({ isOpen, onClose, children }) {
   return (
     <MainContainer>
       <ModalContent>
-        <CloseButton onClick={handleModalClose}>&times;</CloseButton>
+        <CloseButton onClick={() => onClose()}>&times;</CloseButton>
         {children}
       </ModalContent>
     </MainContainer>

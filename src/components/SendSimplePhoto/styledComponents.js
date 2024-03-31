@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.div`
-  /* border: 2px solid green; */
+  border: 2px solid green;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -9,7 +9,7 @@ export const MainContainer = styled.div`
 
 export const ImageContainer = styled.div`
   border-radius: 5px;
-  max-height: 300px;
+  max-height: 280px;
   max-width: 270px;
   min-height: 300px;
   min-width: 270px;
