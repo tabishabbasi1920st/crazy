@@ -13,6 +13,8 @@ import AllChat from "../AllChats";
 import SelectedChatContainer from "../SelectedChatContainer";
 import ChatNotSelected from "../ChatNotSelected";
 import CustomizationSidebar from "../CustomizationSidebar";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const msgDelieveryStatusConstants = {
   pending: "PENDING",
@@ -35,9 +37,15 @@ export default function Home() {
     setCustomizationSidebar,
   } = useContext(ChatContext);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const socket = io("https://crazychat.onrender.com");
     setSocket(socket);
+
+    if (Cookies.get("chatToken") === undefined) {
+      navigate("/login", { replace: true });
+    }
 
     socket.on("connection", (msg) => {
       console.log(msg);

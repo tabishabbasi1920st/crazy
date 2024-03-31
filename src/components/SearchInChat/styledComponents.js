@@ -47,6 +47,7 @@ export const MainContainer = styled.div`
     background-color: transparent;
     outline: none;
     border: none;
+    border:2px solid red;
     font-size: 15px;
     padding: 0px 10px 0px 5px;
     color: #94a3b8;
