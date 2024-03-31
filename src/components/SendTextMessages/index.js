@@ -41,7 +41,7 @@ export default function SendTextMessages() {
       setPressing(true);
       // Trigger your event or perform actions here
       console.log("Long press event triggered");
-    }, 500); // Adjust the duration (in milliseconds) for a long press
+    }, 250); // Adjust the duration (in milliseconds) for a long press
   };
 
   const handleTouchMove = () => {
