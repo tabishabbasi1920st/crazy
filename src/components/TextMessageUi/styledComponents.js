@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 export const MainContainer = styled.div`
   max-width: 80%;
-  padding: 10px;
   border-radius: 10px;
   margin: 10px 0px 10px 0px;
   display: flex;
   position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
 
   right: ${(props) => {
     const { profile, sentBy } = props;
@@ -52,6 +53,14 @@ export const MainContainer = styled.div`
     const { email } = profile;
     return sentBy === email ? "auto" : "";
   }};
+
+  /* Aligning sent messages at right side of the chat container */
+  padding: ${(props) => {
+    const { profile, sentBy } = props;
+    const { email } = profile;
+    return sentBy === email ? "10px" : "";
+  }};
+
   /* Aligning received messages at left side of the chat container */
   margin-right: ${(props) => {
     const { profile, sentBy } = props;
@@ -101,5 +110,3 @@ export const MainContainer = styled.div`
     margin-top: 5px;
   }
 `;
-
-

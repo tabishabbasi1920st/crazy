@@ -5,18 +5,18 @@ export const MainContainer = styled.div`
   width: 100%;
   border-radius: 5px;
   overflow: hidden;
-  /* border: 2px solid red; */
   display: flex;
   gap: 10px;
 
   input {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     background-color: #0f172a;
     border: none;
     color: #fff;
     padding: 10px;
     outline: none;
     border-radius: 5px;
+    width: 100%;
   }
 
   button {

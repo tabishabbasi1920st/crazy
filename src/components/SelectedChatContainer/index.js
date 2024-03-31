@@ -14,7 +14,7 @@ export default function SelectedChatContainer() {
       <Header>
         <SelectedChatHeader />
       </Header>
-      {searchInChat && <SearchInChat />}
+      {/* {searchInChat && <SearchInChat />} */}
       <Main>
         <SelectedChatMain />
       </Main>

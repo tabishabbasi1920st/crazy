@@ -133,7 +133,7 @@ export default function SelectedChatMain() {
       ref={mainChatContainerRef}
       style={{
         width: "100%;",
-        paddingRight: "10px",
+        // paddingRight: "10px",
         display: "flex",
         flexDirection: "column",
         overflowY: "auto",
@@ -142,6 +142,9 @@ export default function SelectedChatMain() {
         transition: "all  .3s ease-in-out",
         scrollbarWidth: "thin",
         scrollbarColor: "#070b15 transparent",
+        // borderWidth: "2px",
+        // borderColor: "red",
+        // borderStyle: "solid",
       }}
     >
       {renderAppropriateView()}

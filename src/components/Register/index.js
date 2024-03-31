@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Oval } from "react-loader-spinner";
 import { MainContainer } from "./styledComponents";
+import Cookies from "js-cookie";
 
 const apiConstants = {
   initial: "INITIAL",
@@ -29,6 +30,10 @@ export default function Register() {
   const [picApiStatus, setPicApiStatus] = useState(apiConstants.initial);
 
   useEffect(() => {
+    if (Cookies.get("chatToken") !== undefined) {
+      navigate("/");
+    }
+
     const uploadingUserDpToCloudinary = async () => {
       try {
         setPicApiStatus(apiConstants.inProgress);

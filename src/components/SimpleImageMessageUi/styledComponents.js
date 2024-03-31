@@ -6,6 +6,8 @@ export const MainContainer = styled.div`
   border-radius: 10px;
   margin: 10px 0px 10px 0px;
   position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
 
   @media screen and (max-width: 576px) {
     max-width: 50%;

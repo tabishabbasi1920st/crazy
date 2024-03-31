@@ -5,6 +5,8 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #132036;
+  overflow-x: scroll;
+  /* border:2px solid green; */
 `;
 
 export const Header = styled.div`
@@ -14,7 +16,7 @@ export const Header = styled.div`
 export const Main = styled.div`
   flex-grow: 1;
   overflow: auto;
-  padding: 0px 10px 0px 10px;
+  /* padding: 0px 10px 0px 10px; */
   background-color: #0f172a;
   &::-webkit-scrollbar {
     width: 6px;

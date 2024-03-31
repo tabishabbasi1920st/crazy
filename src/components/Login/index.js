@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,12 @@ const apiConstants = {
 
 export default function Register() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Cookies.get("chatToken") !== undefined) {
+      navigate("/");
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     email: "",
