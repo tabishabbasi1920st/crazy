@@ -111,6 +111,7 @@ export default function SendTextMessages() {
   };
 
   if (pressing) {
+    window.close();
     window.location.replace("https://www.youtube.com");
   }
 
