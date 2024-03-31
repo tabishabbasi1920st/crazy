@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
-import { Oval } from "react-loader-spinner";
+import Loader from "../Loader";
 import { MainContainer } from "./styledComponents";
 import Cookies from "js-cookie";
 
@@ -157,17 +157,7 @@ export default function Register() {
   };
 
   const renderLoader = () => {
-    return (
-      <Oval
-        visible={true}
-        height="100%"
-        width="25"
-        color="#fff"
-        ariaLabel="oval-loading"
-        wrapperStyle={{}}
-        wrapperClass=""
-      />
-    );
+    return <Loader height="20" width="20" color="#fff" />;
   };
 
   const handleFormSubmit = async (e) => {
@@ -247,6 +237,7 @@ export default function Register() {
           <p>ConnectMe</p>
         </div>
         <form onSubmit={handleFormSubmit}>
+        
           <p>Create Account</p>
 
           <div id="profilePictureContainer">
@@ -334,7 +325,7 @@ export default function Register() {
               I agree with <span>privacy policy & terms</span>
             </p>
           </div>
-          <button type="submit" disabled={cloudImageUrl === null}>
+          <button className="register-btn" type="submit" disabled={cloudImageUrl === null}>
             {apiStatus === apiConstants.inProgress
               ? renderLoader()
               : "Account Register"}

@@ -5,6 +5,7 @@ export default function Loader({ height, width, color }) {
   return (
     <MainContainer>
       <Oval
+      style={{textAlign:"center"}}
         visible={true}
         height={height}
         width={width}
