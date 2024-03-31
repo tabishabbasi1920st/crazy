@@ -7,11 +7,12 @@ export const MainContainer = styled.div`
   align-items: center;
   padding: 5px 10px 5px 10px;
   gap: 10px;
-  height: 51px;
+  height: 70px;
   position: relative;
   bottom: 0px;
   animation: topToInitial 0.2s ease-in-out;
-  border: 2px solid red;
+  /* border: 2px solid red; */
+  justify-content: center;
 
   @keyframes topToInitial {
     0% {
@@ -43,11 +44,10 @@ export const MainContainer = styled.div`
 
   input {
     height: 100%;
-    flex-grow: 1;
     background-color: transparent;
     outline: none;
     border: none;
-    border:2px solid red;
+    width: 90%;
     font-size: 15px;
     padding: 0px 10px 0px 5px;
     color: #94a3b8;
@@ -60,12 +60,13 @@ export const MainContainer = styled.div`
 
 export const InnerContainer = styled.div`
   display: flex;
-  flex-grow: 1;
-  height: 100%;
+  width: 87%;
+  height: 40px;
   border-radius: 5px;
   border: ${({ isChatSearchFocus }) =>
     isChatSearchFocus ? "none" : "1px solid #203047"};
   background-color: ${({ isChatSearchFocus }) =>
     isChatSearchFocus ? "#0f172a" : "transparent"};
   transition: border 0.2s ease-in-out 0s, background-color 0.2s ease-in-out 0.2s;
+  /* border: 2px solid green; */
 `;

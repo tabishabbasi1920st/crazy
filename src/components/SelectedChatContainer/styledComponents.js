@@ -6,7 +6,6 @@ export const MainContainer = styled.div`
   flex-direction: column;
   background-color: #132036;
   overflow-x: scroll;
-  /* border:2px solid green; */
 `;
 
 export const Header = styled.div`

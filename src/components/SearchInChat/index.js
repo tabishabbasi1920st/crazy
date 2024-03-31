@@ -31,6 +31,7 @@ export default function SearchInChat() {
           onFocus={() => setIsChatSearchFocus(true)}
           onBlur={() => setIsChatSearchFocus(false)}
           onChange={handleSearchInputChange}
+          autoFocus
         />
       </InnerContainer>
 

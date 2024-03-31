@@ -10,21 +10,10 @@ export const MainContainer = styled.li`
   display: flex;
   align-items: center;
   cursor: pointer;
-  animation: leftToInitial 0.5s ease-in-out;
-  transition: all 0.1s ease-in-out;
-
-  @keyframes leftToInitial {
-    0% {
-      left: -770px;
-    }
-    100% {
-      left: 0px;
-    }
-  }
 
   &:hover {
     background-color: #0f172a;
-    padding:10px 12px;
+    padding: 10px 12px;
   }
 
   p {

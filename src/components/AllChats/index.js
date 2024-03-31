@@ -44,7 +44,7 @@ export default function AllChat() {
       if (response.ok) {
         const chatList = fetchedData.allChats;
         setChatList(chatList);
-        console.log(chatList)
+        console.log(chatList);
         setApiStatus(apiConstants.success);
       } else {
         setApiStatus(apiConstants.failure);
@@ -101,8 +101,12 @@ export default function AllChat() {
         return renderSuccessView();
       case apiConstants.inProgress:
         return <Loader height="40px" width="40px" color="white" />;
-      default:
+      case apiConstants.initial:
+        return null;
+      case apiConstants.failure:
         return <Failure apiFuncToReq={getAllChats} />;
+      default:
+        return null;
     }
   };
 

@@ -6,7 +6,7 @@ import {
   TimeAndStatusCotainer,
 } from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
 import Loader from "../Loader";
 
