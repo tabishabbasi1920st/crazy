@@ -6,9 +6,8 @@ import {
   TimeAndStatusCotainer,
 } from "./styledComponents";
 import { ChatContext } from "../Context/ChatContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
-import { BiErrorCircle } from "react-icons/bi";
 import Loader from "../Loader";
 
 const msgDelieveryStatusConstants = {

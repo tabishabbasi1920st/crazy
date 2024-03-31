@@ -9,7 +9,7 @@ export const MainContainer = styled.div`
   margin-right: 5px;
   margin-left: 5px;
 
-  @media screen and (max-width:576px){
+  @media screen and (max-width: 576px) {
     max-width: 70%;
   }
 
