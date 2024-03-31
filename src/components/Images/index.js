@@ -21,7 +21,7 @@ export default function Images() {
     const getImages = async () => {
       try {
         setApiStatus(apiConstants.inProgress);
-        const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/all-image-messages?me=${profile.email}&to=${selectedChat.email}`;
+        const apiUrl = `https://crazychat.onrender.com/all-image-messages?me=${profile.email}&to=${selectedChat.email}`;
         const options = {
           method: "GET",
           headers: {
@@ -67,7 +67,11 @@ export default function Images() {
   };
 
   const renderEmptyListView = () => {
-    return <EmptyListContainer>No Images</EmptyListContainer>;
+    return (
+      <EmptyListContainer style={{ color: "#fff" }}>
+        No Images
+      </EmptyListContainer>
+    );
   };
 
   const renderAppropView = () => {
@@ -78,6 +82,8 @@ export default function Images() {
         return <Loader height="25px" width="25px" color="white" />;
       case apiConstants.success:
         return renderSuccessView();
+      case apiConstants.success && imageList.length === 0:
+        return renderEmptyListView();
       case apiConstants.failure:
         return renderFailureView();
       default:
@@ -85,10 +91,5 @@ export default function Images() {
     }
   };
 
-  return (
-    <MainContainer>
-      {renderAppropView()}
-      {imageList.length === 0 && renderEmptyListView()}
-    </MainContainer>
-  );
+  return <MainContainer>{renderAppropView()} </MainContainer>;
 }

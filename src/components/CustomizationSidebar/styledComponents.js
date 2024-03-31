@@ -9,7 +9,7 @@ export const MainContainer = styled.div`
   flex-direction: column;
   overflow: auto;
   height: calc(100vh - 70px);
-  width: 220px;
+  width: 300px;
   &::-webkit-scrollbar {
     width: 6px;
   }

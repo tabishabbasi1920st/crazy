@@ -23,7 +23,7 @@ export default function Images() {
         setApiStatus(apiConstants.inProgress);
         const me = profile.email;
         const to = selectedChat.email;
-        const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/all-video-messages?me=${me}&to=${to}`;
+        const apiUrl = `https://crazychat.onrender.com/all-video-messages?me=${me}&to=${to}`;
         const options = {
           method: "GET",
           headers: {
@@ -69,7 +69,11 @@ export default function Images() {
   };
 
   const renderEmptyListView = () => {
-    return <EmptyListContainer>No Videos</EmptyListContainer>;
+    return (
+      <EmptyListContainer style={{ color: "#fff" }}>
+        No Videos
+      </EmptyListContainer>
+    );
   };
 
   const renderAppropView = () => {
@@ -80,6 +84,8 @@ export default function Images() {
         return <Loader height="25px" width="25px" color="white" />;
       case apiConstants.success:
         return renderSuccessView();
+      case apiConstants.success && videoList.length === 0:
+        return renderEmptyListView();
       case apiConstants.failure:
         return renderFailureView();
       default:
@@ -87,10 +93,5 @@ export default function Images() {
     }
   };
 
-  return (
-    <MainContainer>
-      {renderAppropView()}
-      {videoList.length <= 0 && renderEmptyListView()}
-    </MainContainer>
-  );
+  return <MainContainer>{renderAppropView()}</MainContainer>;
 }

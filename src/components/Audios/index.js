@@ -23,7 +23,7 @@ export default function Images() {
         setApiStatus(apiConstants.inProgress);
         const me = profile.email;
         const to = selectedChat.email;
-        const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/all-audio-messages?me=${me}&to=${to}`;
+        const apiUrl = `https://crazychat.onrender.com/all-audio-messages?me=${me}&to=${to}`;
         const options = {
           method: "GET",
           headers: {
@@ -84,6 +84,8 @@ export default function Images() {
         return <Loader height="25px" width="25px" color="white" />;
       case apiConstants.success:
         return renderSuccessView();
+      case apiConstants.success && audioList.length === 0:
+        return renderEmptyListView();
       case apiConstants.failure:
         return renderFailureView();
       default:
@@ -91,10 +93,5 @@ export default function Images() {
     }
   };
 
-  return (
-    <MainContainer>
-      {renderAppropView()}
-      {audioList.length <= 0 && renderEmptyListView()}
-    </MainContainer>
-  );
+  return <MainContainer>{renderAppropView()}</MainContainer>;
 }
