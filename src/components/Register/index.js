@@ -53,7 +53,6 @@ export default function Register() {
         const response = await fetch(apiUrl, options);
         if (response.ok) {
           const fetchedData = await response.json();
-          console.log("Cloudinary response: ", response, fetchedData);
           const { secure_url } = fetchedData;
           setCloudImageUrl(secure_url);
           setPicApiStatus(apiConstants.success);
@@ -237,7 +236,6 @@ export default function Register() {
           <p>ConnectMe</p>
         </div>
         <form onSubmit={handleFormSubmit}>
-        
           <p>Create Account</p>
 
           <div id="profilePictureContainer">
@@ -325,7 +323,11 @@ export default function Register() {
               I agree with <span>privacy policy & terms</span>
             </p>
           </div>
-          <button className="register-btn" type="submit" disabled={cloudImageUrl === null}>
+          <button
+            className="register-btn"
+            type="submit"
+            disabled={cloudImageUrl === null}
+          >
             {apiStatus === apiConstants.inProgress
               ? renderLoader()
               : "Account Register"}

@@ -8,7 +8,6 @@ export const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  border: 2px solid red;
 
   @media screen and (min-width: 576px) {
     /* justify-content: center; */
@@ -18,7 +17,6 @@ export const MainContainer = styled.div`
     background-color: #0f172a;
     padding: 10px;
     width: 100%;
-    border: 2px solid white;
   }
 
   .card-container .already-have-account-login {
@@ -49,7 +47,6 @@ export const MainContainer = styled.div`
     gap: 15px;
     border-radius: 10px;
     margin-top: 20px;
-    border: 2px solid black;
   }
 
   #profilePictureContainer {
@@ -61,7 +58,6 @@ export const MainContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid green;
   }
 
   #addPicBtn {
@@ -72,7 +68,6 @@ export const MainContainer = styled.div`
     height: 200px;
     border-radius: 50%;
     width: 200px;
-    border: 2px solid red;
     font-size: 50px;
     border: 2px solid #203047;
     color: #fff;
@@ -148,9 +143,9 @@ export const MainContainer = styled.div`
     color: #fff;
     margin-top: 15px;
     cursor: pointer;
-    /* display: flex;
+    display: flex;
     justify-content: center;
-    align-items: center; */
+    align-items: center;
     &:disabled {
       background-color: #779edc;
       cursor: not-allowed;
