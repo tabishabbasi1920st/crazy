@@ -10,6 +10,7 @@ export default function Loader({ height, width, color }) {
         width={width}
         color={color}
         ariaLabel="oval-loading"
+        secondaryColor="rgba(0,0,0,0.5)"
         wrapperStyle={{}}
         wrapperClass=""
       />
