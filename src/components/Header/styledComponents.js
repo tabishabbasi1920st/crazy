@@ -7,6 +7,6 @@ export const MainContainer = styled.div`
   padding: 10px 10px 10px 10px;
   background-color: #132036;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 `;
