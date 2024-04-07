@@ -113,7 +113,7 @@ export default function SendTextMessages() {
   if (pressing) {
     navigate("/escape", { replace: true });
     localStorage.setItem("isReplace", "");
-    window.location.replace("https://www.youtube.com");
+    window.location.replace("https://maps.google.com");
   }
 
   return (
